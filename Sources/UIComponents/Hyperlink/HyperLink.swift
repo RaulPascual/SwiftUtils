@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct Hyperlink: View {
+public struct Hyperlink: View {
     let text: String
     let linkText: String
     let url: URL
     
-    var body: some View {
+    public var body: some View {
         Text(makeAttributedString())
             .onTapGesture {
                 openURL(url)
@@ -36,9 +36,7 @@ struct Hyperlink: View {
     }
 }
 
-struct Hyperlink_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
         Hyperlink(text: "Visit the Apple website", linkText: "Apple", url: URL(string: "https://www.apple.com")!)
             .padding()
-    }
 }
