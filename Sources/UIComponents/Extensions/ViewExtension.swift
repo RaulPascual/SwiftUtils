@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func customSheet<SimpleContent: View>(
+    public func customSheet<SimpleContent: View>(
            isPresented: Binding<Bool>,
            backgroundColor: Color? = Color.white,
            presentationDetents: Set<PresentationDetent>,
