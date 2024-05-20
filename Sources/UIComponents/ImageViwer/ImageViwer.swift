@@ -7,13 +7,13 @@
 
 import SwiftUI
 /**
-   A view for displaying an image that can be zoomed and panned.
-   - Parameters:
-      - image: The image to be displayed and interacted with.
-
-   - Note: This view supports pinch-to-zoom and drag-to-pan gestures, and automatically adjusts the image position and scale to fit within the view bounds.
-*/
-struct ImageViwer: View {
+ A view for displaying an image that can be zoomed and panned.
+ - Parameters:
+ - image: The image to be displayed and interacted with.
+ 
+ - Note: This view supports pinch-to-zoom and drag-to-pan gestures, and automatically adjusts the image position and scale to fit within the view bounds.
+ */
+public struct ImageViwer: View {
     let image: Image
     
     @State private var scale: CGFloat = 1
@@ -22,11 +22,11 @@ struct ImageViwer: View {
     @State private var offset: CGPoint = .zero
     @State private var lastTranslation: CGSize = .zero
     
-    init(image: Image) {
+   public init(image: Image) {
         self.image = image
     }
     
-    var body: some View {
+    public var body: some View {
         GeometryReader { proxy in
             ZStack {
                 image
