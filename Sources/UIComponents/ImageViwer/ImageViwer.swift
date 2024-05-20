@@ -7,12 +7,12 @@
 
 import SwiftUI
 /**
-   A view for displaying an image that can be zoomed and panned.
-   - Parameters:
-      - image: The image to be displayed and interacted with.
-
-   - Note: This view supports pinch-to-zoom and drag-to-pan gestures, and automatically adjusts the image position and scale to fit within the view bounds.
-*/
+ A view for displaying an image that can be zoomed and panned.
+ - Parameters:
+ - image: The image to be displayed and interacted with.
+ 
+ - Note: This view supports pinch-to-zoom and drag-to-pan gestures, and automatically adjusts the image position and scale to fit within the view bounds.
+ */
 public struct ImageViwer: View {
     let image: Image
     
