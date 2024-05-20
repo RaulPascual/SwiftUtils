@@ -12,6 +12,12 @@ public struct Hyperlink: View {
     let linkText: String
     let url: URL
     
+    public init(text: String, linkText: String, url: URL) {
+        self.text = text
+        self.linkText = linkText
+        self.url = url
+    }
+    
     public var body: some View {
         Text(makeAttributedString())
             .onTapGesture {
