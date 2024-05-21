@@ -16,6 +16,6 @@ final class ImageViwerTests: XCTestCase {
         let view = ImageViwer(image: Image(systemName: "globe"))
         
         assertSnapshot(of: view,
-                       as: .image(precision: 1, layout: .device(config: .iPhone13)))
+                       as: .image(precision: 1, layout: .fixed(width: 300, height: 600)))
     }
 }
