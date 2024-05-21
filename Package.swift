@@ -13,6 +13,9 @@ let package = Package(
         .library(
             name: "UIComponentsLibrary", targets: ["UIComponents"]),
     ],
+    dependencies: [
+             .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.15.0")
+        ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -20,6 +23,11 @@ let package = Package(
         .target(name: "UIComponents", path: "Sources/UIComponents"),
         .testTarget(
             name: "SwiftUtilsTests",
-            dependencies: ["SwiftUtils"]),
+            dependencies: ["SwiftUtils",
+                           .product(name: "SnapshotTesting", package: "swift-snapshot-testing")]),
+        .testTarget(
+            name: "UIComponentsSnapshotTests",
+            dependencies: ["UIComponents",
+                           .product(name: "SnapshotTesting", package: "swift-snapshot-testing")]),
     ]
 )
