@@ -16,7 +16,7 @@ To use this SPM, add the following URL as dependency in your project
 
 ## Utilities (WIP)
 - [ ]  Haptic Vibrations
-- [ ]  User Defaults manager
+- [x]  User Defaults manager
 - [ ]  Local Notification manager 
 - [ ]  Network layer
 - [x]  Date manager
@@ -26,7 +26,7 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  Hyperlink
 - [x]  ImageViwer
 - [ ]  SideMenu
-- [ ]  Floating button
+- [x]  Floating button
 
 
 ## Authors

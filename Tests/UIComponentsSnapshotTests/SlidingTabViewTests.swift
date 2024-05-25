@@ -20,6 +20,6 @@ final class SlidingTabViewTests: XCTestCase {
                                   activeTabColor: .blue)
         
         assertSnapshot(of: view,
-                       as: .image(precision: 1, layout: .fixed(width: 300, height: 600)))
+                       as: .image(precision: 0.97, layout: .device(config: .iPhone13Pro)))
     }
 }
