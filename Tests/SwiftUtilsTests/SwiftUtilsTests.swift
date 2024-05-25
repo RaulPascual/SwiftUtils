@@ -1,51 +1,40 @@
 import XCTest
 @testable import SwiftUtils
 
-final class DateFormatManagerTests: XCTestCase {
-    
-    var dateFormatManager: DateFormatManager!
-    
-    override func setUp() {
-        super.setUp()
-        dateFormatManager = DateFormatManager()
-    }
+final class NotificationManagerTests: XCTestCase {
+    func testScheduleNotification() {
+            // Arrange
+            let mockNotificationCenter = MockNotificationCenter()
+            let notificationManager = NotificationManager(notificationCenter: mockNotificationCenter)
+            let date = Date()
+            let title = "Test Title"
+            let message = "Test Message"
+            
+            // Act
+            notificationManager.scheduleNotification(date: date, title: title, message: message)
+            
+            // Assert
+            XCTAssertTrue(mockNotificationCenter.didAddRequest, "The add(_:withCompletionHandler:) method should be called")
+            XCTAssertEqual(mockNotificationCenter.addedRequest?.content.title, title, "The notification title should be set correctly")
+            XCTAssertEqual(mockNotificationCenter.addedRequest?.content.body, message, "The notification message should be set correctly")
+            
+            // Optionally check the trigger date components
+            let calendar = Calendar.current
+            let expectedDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            let trigger = mockNotificationCenter.addedRequest?.trigger as? UNCalendarNotificationTrigger
+            XCTAssertEqual(trigger?.dateComponents, expectedDateComponents, "The notification trigger date components should be set correctly")
+        }
+}
 
-    override func tearDown() {
-        dateFormatManager = nil
-        super.tearDown()
-    }
 
-    func testDateFromString() {
-        let dateString = "2023-11-01"
-        var dateComponents = DateComponents()
-        dateComponents.year = 2023
-        dateComponents.month = 11
-        dateComponents.day = 01
-        // Create date from components
-        let userCalendar = Calendar(identifier: .gregorian)
-        let someDateTime = userCalendar.date(from: dateComponents)
-        
-        let expectedDate = someDateTime
-        let resultDate = dateFormatManager.date(dateString: dateString,
-                                                format: DateStrings.yyyyMMdd.rawValue)
-        
-        XCTAssertEqual(resultDate, expectedDate, "The converted date does not match the expected date.")
-    }
-    
-    func testStringFromDate() {
-        let date = Date(timeIntervalSinceReferenceDate: 738100693) // = "2024-05-22"
-        let expectedDateString = "2024-05-22"
-        let resultDateString = dateFormatManager.string(date: date, format: DateStrings.yyyyMMdd.rawValue)
-        
-        XCTAssertEqual(resultDateString, expectedDateString, "The generated date string does not match the expected string.")
-    }
-    
-    func testCustomFormattedStringFromDate() {
-        let date = Date(timeIntervalSinceReferenceDate: 738100693) // = "2024-05-22"
-        let customFormatString = "MMM d, yyyy"
-        let expectedCustomFormattedString = "may 22, 2024"
-        let resultCustomFormattedString = dateFormatManager.customFormattedString(date: date, stringFormat: customFormatString)
-        
-        XCTAssertEqual(resultCustomFormattedString, expectedCustomFormattedString, "The generated date string does not match the expected string.")
+class MockNotificationCenter: NotificationScheduling {
+    var didAddRequest = false
+    var addedRequest: UNNotificationRequest?
+    var completionHandler: ((Error?) -> Void)?
+
+    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?) {
+        didAddRequest = true
+        addedRequest = request
+        self.completionHandler = completionHandler
     }
 }
