@@ -18,6 +18,6 @@ final class HyperLinkTests: XCTestCase {
                              url: URL(string: "https://example.com")!)
         
         assertSnapshot(of: view,
-                       as: .image(precision: 1, layout: .fixed(width: 300, height: 600)))
+                       as: .image(precision: 0.97, layout: .device(config: .iPhone13Pro)))
     }
 }

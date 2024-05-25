@@ -7,22 +7,47 @@
 
 import SwiftUI
 
-struct FloatingButton: View {
+/**
+ A customizable floating button view that can be positioned in various locations on the screen.
+
+ - Parameters:
+    - image: The image to be displayed on the button.
+    - backgroundColor: The background color of the button.
+    - foregroundColor: The color of the button's content.
+    - size: The size of the button.
+    - position: The position of the button on the screen.
+    - clipShape: The shape used to clip the button.
+    - action: The action to be performed when the button is pressed.
+
+ - Example:
+    ```
+    FloatingButton(image: Image(systemName: "plus"),
+                   backgroundColor: .blue,
+                   foregroundColor: .white,
+                   size: 50,
+                   position: .bottomRight,
+                   clipShape: Circle()) {
+                       // Button action here
+                   }
+    ```
+ */
+struct FloatingButton<S: Shape>: View {
     let image: Image
     let backgroundColor: Color
     let foregroundColor: Color
     let size: CGFloat
     let position: FloatingButtonPosition
+    let clipShape: S
     var action: () -> Void
     
     var body: some View {
         VStack {
-            if position == .bottomLeft || position == .bottomCenter || position == .bottomRight {
+            if isBottomPosition(position) {
                 Spacer()
             }
             
             HStack {
-                if position == .bottomRight || position == .topRight {
+                if isRightPosition(position) {
                     Spacer()
                 }
                 
@@ -37,19 +62,35 @@ struct FloatingButton: View {
                 }
                 .background(backgroundColor)
                 .foregroundColor(foregroundColor)
-                .clipShape(Circle())
+                .clipShape(clipShape)
                 .padding()
                 
-                if position == .bottomLeft || position == .topLeft {
+                if isLeftPosition(position) {
                     Spacer()
                 }
             }
             
-            if position == .topLeft || position == .topCenter || position == .topRight {
+            if isTopPosition(position) {
                 Spacer()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func isBottomPosition(_ position: FloatingButtonPosition) -> Bool {
+        return position == .bottomLeft || position == .bottomCenter || position == .bottomRight
+    }
+    
+    private func isTopPosition(_ position: FloatingButtonPosition) -> Bool {
+        return position == .topLeft || position == .topCenter || position == .topRight
+    }
+    
+    private func isLeftPosition(_ position: FloatingButtonPosition) -> Bool {
+        return position == .bottomLeft || position == .topLeft
+    }
+    
+    private func isRightPosition(_ position: FloatingButtonPosition) -> Bool {
+        return position == .bottomRight || position == .topRight
     }
 }
 
@@ -75,8 +116,9 @@ struct FloatingButtonExample: View {
                            backgroundColor: .blue.opacity(0.8),
                            foregroundColor: .white,
                            size: 30,
-                           position: .bottomRight) {
-                print("Hey")
+                           position: .bottomRight, 
+                           clipShape: Circle()) {
+                print("Button example action!!")
             }
         }
     }
