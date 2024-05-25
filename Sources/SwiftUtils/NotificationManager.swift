@@ -9,6 +9,9 @@ import Foundation
 import UserNotifications
 
 public struct NotificationManager{
+    
+    public init() {}
+    
     /**
        Schedules a local notification with the specified date, title, and message.
        - Parameters:
