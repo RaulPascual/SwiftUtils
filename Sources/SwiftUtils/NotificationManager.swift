@@ -8,16 +8,16 @@
 import Foundation
 import UserNotifications
 
-protocol NotificationScheduling {
+public protocol NotificationScheduling {
     func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
 }
 
 extension UNUserNotificationCenter: NotificationScheduling {}
 
-struct NotificationManager {
+public struct NotificationManager {
     private let notificationCenter: NotificationScheduling
 
-    init(notificationCenter: NotificationScheduling = UNUserNotificationCenter.current()) {
+    public init(notificationCenter: NotificationScheduling = UNUserNotificationCenter.current()) {
         self.notificationCenter = notificationCenter
     }
 
@@ -30,7 +30,7 @@ struct NotificationManager {
 
        - Note: This function logs an error message if there is an issue scheduling the notification.
     */
-    func scheduleNotification(date: Date, title: String, message: String) {
+    public func scheduleNotification(date: Date, title: String, message: String) {
         // Creates the content of the notification
         let content = UNMutableNotificationContent()
         content.title = title
