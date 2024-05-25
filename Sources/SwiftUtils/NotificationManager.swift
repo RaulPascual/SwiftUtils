@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-struct NotificationManager{
+public struct NotificationManager{
     /**
        Schedules a local notification with the specified date, title, and message.
        - Parameters:
@@ -18,7 +18,7 @@ struct NotificationManager{
 
        - Note: This function logs an error message if there is an issue scheduling the notification.
     */
-    func scheduleNotification(date: Date, title: String, message: String) {
+    public func scheduleNotification(date: Date, title: String, message: String) {
         // Creates the content of the notification
         let content = UNMutableNotificationContent()
         content.title = title
@@ -48,7 +48,7 @@ struct NotificationManager{
 
        - Note: This function logs the deletion action and ensures the notification is removed from pending requests.
     */
-    func removeNotification(date: Date) {
+    public func removeNotification(date: Date) {
         let identifier = date.description
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
@@ -63,7 +63,7 @@ struct NotificationManager{
        Lists all scheduled notifications with their details including the date, title, and body.
        - Note: This function retrieves all pending notification requests from `UNUserNotificationCenter` and logs the details of each notification.
     */
-    func listAllNotifications() {
+    public func listAllNotifications() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
             print("Scheduled notifications:")
 
@@ -91,7 +91,7 @@ struct NotificationManager{
 
        - Note: This function synchronously checks the pending notifications, which may block the main thread.
     */
-    func checkIfNotificationsExists(date: Date) -> Bool {
+    public func checkIfNotificationsExists(date: Date) -> Bool {
         let center = UNUserNotificationCenter.current()
         let semaphore = DispatchSemaphore(value: 0)
         var notificationScheduled = false
@@ -118,7 +118,7 @@ struct NotificationManager{
        Cancels all scheduled local notifications.
        - Note: This function removes all pending notification requests from `UNUserNotificationCenter`.
     */
-    func cancelAllLocalNotifications() {
+    public func cancelAllLocalNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 }
