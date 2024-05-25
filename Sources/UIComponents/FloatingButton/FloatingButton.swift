@@ -16,36 +16,51 @@ struct FloatingButton: View {
     var action: () -> Void
     
     var body: some View {
-        HStack {
-            if position == .right {
+        VStack {
+            if position == .bottomLeft || position == .bottomCenter || position == .bottomRight {
                 Spacer()
             }
             
-            Button(action: {
-                action()
-            }) {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: size, height: size)
-                    .padding(8)
+            HStack {
+                if position == .bottomRight || position == .topRight {
+                    Spacer()
+                }
+                
+                Button(action: {
+                    action()
+                }) {
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: size, height: size)
+                        .padding(8)
+                }
+                .background(backgroundColor)
+                .foregroundColor(foregroundColor)
+                .clipShape(Circle())
+                .padding()
+                
+                if position == .bottomLeft || position == .topLeft {
+                    Spacer()
+                }
             }
-            .background(backgroundColor)
-            .foregroundColor(foregroundColor)
-            .clipShape(Circle())
-            .padding()
             
-            if position == .left {
+            if position == .topLeft || position == .topCenter || position == .topRight {
                 Spacer()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 enum FloatingButtonPosition {
-    case left
-    case center
-    case right
+    case bottomLeft
+    case bottomCenter
+    case bottomRight
+    
+    case topLeft
+    case topCenter
+    case topRight
 }
 
 struct FloatingButtonExample: View {
@@ -60,7 +75,7 @@ struct FloatingButtonExample: View {
                            backgroundColor: .blue.opacity(0.8),
                            foregroundColor: .white,
                            size: 30,
-                           position: .right) {
+                           position: .bottomRight) {
                 print("Hey")
             }
         }
