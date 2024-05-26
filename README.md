@@ -17,7 +17,7 @@ To use this SPM, add the following URL as dependency in your project
 ## Utilities (WIP)
 - [ ]  Haptic Vibrations
 - [x]  User Defaults manager
-- [ ]  Local Notification manager 
+- [x]  Local Notification manager 
 - [ ]  Network layer
 - [x]  Date manager
 

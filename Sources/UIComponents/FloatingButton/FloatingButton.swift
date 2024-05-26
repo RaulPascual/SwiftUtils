@@ -104,6 +104,7 @@ enum FloatingButtonPosition {
     case topRight
 }
 
+// MARK: Implementation example
 struct FloatingButtonExample: View {
     var body: some View {
         ZStack(alignment: .bottom) {
