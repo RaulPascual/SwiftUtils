@@ -24,7 +24,7 @@ extension HTTPClient {
 
      - Throws: `RequestError` if the request fails or the response cannot be decoded.
      */
-    func sendRequest<T: Decodable>(
+    public func sendRequest<T: Decodable>(
         enableDebug: Bool = false,
         endpoint: Endpoint,
         responseModel: T.Type
