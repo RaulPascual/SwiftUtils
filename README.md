@@ -15,18 +15,20 @@ To use this SPM, add the following URL as dependency in your project
 # Features
 
 ## Utilities (WIP)
-- [ ]  Haptic Vibrations
 - [x]  User Defaults manager
 - [x]  Local Notification manager 
 - [x]  Network layer
 - [x]  Date manager
+- [ ]  Haptic Vibrations
 
 ## Components (WIP)
+- [x]  Onboarding view
 - [x]  Custom sheet (semi-modal)
 - [x]  Hyperlink
 - [x]  ImageViwer
-- [ ]  SideMenu
 - [x]  Floating button
+- [ ]  SideMenu
+- [ ]  Update app view
 
 
 ## Authors

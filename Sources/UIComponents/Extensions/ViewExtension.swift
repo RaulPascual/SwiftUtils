@@ -25,4 +25,10 @@ extension View {
                    dismissAction: dismissAction,
                    content: content))
            }
+    
+    func customAccessibility(label: String? = nil, hint: String? = nil, traits: AccessibilityTraits? = nil) -> some View {
+        accessibilityLabel(label ?? "")
+            .accessibilityHint(hint ?? "")
+            .accessibilityAddTraits(traits ?? [])
+    }
 }
