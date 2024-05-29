@@ -19,7 +19,8 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  Local Notification manager 
 - [x]  Network layer
 - [x]  Date manager
-- [ ]  Haptic Vibrations
+- [x]  Haptic Vibrations
+
 
 ## Components (WIP)
 - [x]  Onboarding view
@@ -27,9 +28,8 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  Hyperlink
 - [x]  ImageViwer
 - [x]  Floating button
+- [x]  Update app view
 - [ ]  SideMenu
-- [ ]  Update app view
-
 
 ## Authors
 

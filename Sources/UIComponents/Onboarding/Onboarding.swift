@@ -6,7 +6,17 @@
 //
 
 import SwiftUI
+/**
+ A view representing an onboarding screen, displaying a series of onboarding views with navigation.
 
+ - Parameters:
+    - primaryBackgroundColor: The primary background color of the onboarding view.
+    - secondaryBackgroundColor: An optional secondary background color. Default is nil.
+    - buttonImage: The image for the navigation button. Default is a system image "arrow.right.circle.fill".
+    - onboardViews: An array of `OnBoardView` objects representing the individual onboarding views.
+
+ - Note: The `onboardingViewed` property is used to track if the onboarding has been viewed, stored in `AppStorage`.
+ */
 struct OnboardingView: View {
     @AppStorage("onboardingViewed") var onboardingViewed: Bool?
     let primaryBackgroundColor: Color
@@ -44,6 +54,18 @@ struct OnboardingView: View {
     }
 }
 
+/**
+ A view representing a single onboarding screen.
+
+ - Parameters:
+    - id: A unique identifier for the onboarding view.
+    - image: The image to be displayed in the onboarding view.
+    - title: The title text of the onboarding view.
+    - description: An optional description text for the onboarding view. Default is nil.
+    - titleForegroundColor: An optional color for the title text. Default is nil.
+    - descriptionForegroundColor: An optional color for the description text. Default is nil.
+    - comingSoon: An optional boolean indicating if the feature is coming soon. Default is false.
+ */
 struct OnBoardView: View, Identifiable {
     var id: UUID
     var image: Image
