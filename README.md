@@ -15,20 +15,20 @@ To use this SPM, add the following URL as dependency in your project
 # Features
 
 ## Utilities (WIP)
-- [x]  User Defaults manager
-- [x]  Local Notification manager 
-- [x]  Network layer
-- [x]  Date manager
-- [x]  Haptic Vibrations
+- [x]  [User Defaults manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/UserDefaultsManager.swift)
+- [x]  [Local Notification manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/NotificationManager.swift) 
+- [x]  [Network layer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/SwiftUtils/Network)
+- [x]  [Date manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DateFormatManager.swift)
+- [x]  [Haptic Vibrations](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/HapticVibration.swift)
 
 
 ## Components (WIP)
-- [x]  Onboarding view
-- [x]  Custom sheet (semi-modal)
-- [x]  Hyperlink
-- [x]  ImageViwer
-- [x]  Floating button
-- [x]  Update app view
+- [x]  [Onboarding view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Onboarding)
+- [x]  [Sheet (semi-modal)](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/CustomSheet)
+- [x]  [Hyperlink](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Hyperlink)
+- [x]  [ImageViwer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ImageViwer)
+- [x]  [Floating button](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/FloatingButton)
+- [x]  [Update app view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/UpdateAppView)
 - [ ]  SideMenu
 
 ## Authors
