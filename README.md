@@ -29,6 +29,7 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  ImageViwer
 - [x]  Floating button
 - [x]  Update app view
+- [x]  Scroll transitions
 - [ ]  SideMenu
 
 ## Authors

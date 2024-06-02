@@ -26,9 +26,24 @@ extension View {
                    content: content))
            }
     
-    func customAccessibility(label: String? = nil, hint: String? = nil, traits: AccessibilityTraits? = nil) -> some View {
+    public func customAccessibility(label: String? = nil, hint: String? = nil, traits: AccessibilityTraits? = nil) -> some View {
         accessibilityLabel(label ?? "")
             .accessibilityHint(hint ?? "")
             .accessibilityAddTraits(traits ?? [])
     }
+    
+    
+    // MARK: - Scroll Transitions
+    public func scrollTransition() -> some View {
+        self.modifier(ScrollTransitionModifier())
+    }
+    
+    public func scaleAndOpacityTranstion() -> some View {
+        self.modifier(ScaleAndOpacityTransitionModifier())
+    }
+    
+    public func combinedTranstion() -> some View {
+        self.modifier(CombinedTransitionModifier())
+    }
+    
 }
