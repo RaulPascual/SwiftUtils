@@ -17,7 +17,6 @@ public struct ScrollTransitionModifier: ViewModifier {
     }
 }
 
-
 public struct ScaleAndOpacityTransitionModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content.scrollTransition { effect, phase in
