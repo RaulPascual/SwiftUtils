@@ -23,22 +23,13 @@ To use this SPM, add the following URL as dependency in your project
 
 
 ## Components (WIP)
-<<<<<<< HEAD
-- [x]  Onboarding view
-- [x]  Custom sheet (semi-modal)
-- [x]  Hyperlink
-- [x]  ImageViwer
-- [x]  Floating button
-- [x]  Update app view
-- [x]  Scroll transitions
-=======
 - [x]  [Onboarding view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Onboarding)
 - [x]  [Sheet (semi-modal)](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/CustomSheet)
 - [x]  [Hyperlink](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Hyperlink)
 - [x]  [ImageViwer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ImageViwer)
 - [x]  [Floating button](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/FloatingButton)
 - [x]  [Update app view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/UpdateAppView)
->>>>>>> main
+- [x]  Scroll transitions
 - [ ]  SideMenu
 
 ## Authors
