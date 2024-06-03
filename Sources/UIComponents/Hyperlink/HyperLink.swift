@@ -47,12 +47,9 @@ public struct Hyperlink: View {
     }
     
     private func openURL(_ url: URL) {
-#if os(iOS)
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-#endif
-        
     }
 }
 

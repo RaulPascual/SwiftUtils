@@ -29,6 +29,7 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  [ImageViwer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ImageViwer)
 - [x]  [Floating button](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/FloatingButton)
 - [x]  [Update app view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/UpdateAppView)
+- [x]  Scroll transitions
 - [ ]  SideMenu
 
 ## Authors
