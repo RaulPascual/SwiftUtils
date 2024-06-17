@@ -61,7 +61,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 
 struct ExampleCheckBoxView: View {
     @State var isChecked = false
-    @State var showError = false
+    @State var showError = true
     var body: some View {
         Checkbox(isChecked: $isChecked,
                  label: "Read terms and conditions",
