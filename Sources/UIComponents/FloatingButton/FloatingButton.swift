@@ -31,7 +31,7 @@ import SwiftUI
                    }
     ```
  */
-struct FloatingButton<S: Shape>: View {
+public struct FloatingButton<S: Shape>: View {
     let image: Image
     let backgroundColor: Color
     let foregroundColor: Color
@@ -40,7 +40,19 @@ struct FloatingButton<S: Shape>: View {
     let clipShape: S
     var action: () -> Void
     
-    var body: some View {
+    public init(image: Image, backgroundColor: Color, foregroundColor: Color,
+                size: CGFloat, position: FloatingButtonPosition,
+                clipShape: S, action: @escaping () -> Void) {
+        self.image = image
+        self.backgroundColor = backgroundColor
+        self.foregroundColor = foregroundColor
+        self.size = size
+        self.position = position
+        self.clipShape = clipShape
+        self.action = action
+    }
+    
+    public var body: some View {
         VStack {
             if isBottomPosition(position) {
                 Spacer()
@@ -94,7 +106,7 @@ struct FloatingButton<S: Shape>: View {
     }
 }
 
-enum FloatingButtonPosition {
+public enum FloatingButtonPosition {
     case bottomLeft
     case bottomCenter
     case bottomRight

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct RegexValidator: ViewModifier {
+public struct RegexValidator: ViewModifier {
     @Binding var text: String
     var regexPattern: String
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .onChange(of: text) { _, newValue in
                 if !newValue.matches(regexPattern) {

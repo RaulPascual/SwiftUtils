@@ -21,7 +21,7 @@ import SwiftUI
 
  - Note: The view uses a custom `CheckboxToggleStyle` to style the checkbox.
  */
-struct Checkbox: View {
+public struct Checkbox: View {
     @Binding var isChecked: Bool
     var label: String
     var errorText: String = ""
@@ -29,8 +29,20 @@ struct Checkbox: View {
     var checkBoxUnselectedColor: Color = .black
     var size: CGFloat = 20
     @Binding var showError: Bool
+    
+    public init(isChecked: Binding<Bool>, label: String, errorText: String, 
+                checkBoxSelectedColor: Color = .blue, checkBoxUnselectedColor: Color = .black,
+                size: CGFloat = 20, showError: Binding<Bool>) {
+        self._isChecked = isChecked
+        self.label = label
+        self.errorText = errorText
+        self.checkBoxSelectedColor = checkBoxSelectedColor
+        self.checkBoxUnselectedColor = checkBoxUnselectedColor
+        self.size = size
+        self._showError = showError
+    }
 
-    var body: some View {
+    public var body: some View {
         Toggle(isOn: $isChecked) {
             Text(label)
         }
@@ -42,7 +54,7 @@ struct Checkbox: View {
     }
 }
 
-struct CheckboxToggleStyle: ToggleStyle {
+public struct CheckboxToggleStyle: ToggleStyle {
     var selectedColor: Color
     var unselectedColor: Color
     var size: CGFloat = 20
@@ -50,7 +62,7 @@ struct CheckboxToggleStyle: ToggleStyle {
     @Binding var showError: Bool
     
     
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Image(systemName: configuration.isOn ? "checkmark.square" : "square")

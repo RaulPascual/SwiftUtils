@@ -17,14 +17,22 @@ import SwiftUI
 
  - Note: The `onboardingViewed` property is used to track if the onboarding has been viewed, stored in `AppStorage`.
  */
-struct OnboardingView: View {
+public struct OnboardingView: View {
     @AppStorage("onboardingViewed") var onboardingViewed: Bool?
     let primaryBackgroundColor: Color
     let secondaryBackgroundColor: Color? = nil
     let buttonImage: Image = Image(systemName: "arrow.right.circle.fill")
     let onboardViews: [OnBoardView]
     
-    var body: some View {
+    public init(onboardingViewed: Bool? = nil, 
+                primaryBackgroundColor: Color,
+                onboardViews: [OnBoardView]) {
+        self._onboardingViewed = AppStorage("onboardingViewed")
+        self.primaryBackgroundColor = primaryBackgroundColor
+        self.onboardViews = onboardViews
+    }
+    
+    public var body: some View {
         VStack {
             TabView {
                 ForEach(onboardViews) { view in
@@ -66,8 +74,8 @@ struct OnboardingView: View {
     - descriptionForegroundColor: An optional color for the description text. Default is nil.
     - comingSoon: An optional boolean indicating if the feature is coming soon. Default is false.
  */
-struct OnBoardView: View, Identifiable {
-    var id: UUID
+public struct OnBoardView: View, Identifiable {
+    public var id: UUID
     var image: Image
     var title: String
     var description: String?
@@ -75,7 +83,19 @@ struct OnBoardView: View, Identifiable {
     var descriptionForegrounColor: Color?
     var comingSoon: Bool? = false
     
-    var body: some View {
+    public init(id: UUID, image: Image, title: String, description: String? = nil, 
+                titleForegrounColor: Color? = nil, descriptionForegrounColor: Color? = nil,
+                comingSoon: Bool? = nil) {
+        self.id = id
+        self.image = image
+        self.title = title
+        self.description = description
+        self.titleForegrounColor = titleForegrounColor
+        self.descriptionForegrounColor = descriptionForegrounColor
+        self.comingSoon = comingSoon
+    }
+    
+    public var body: some View {
         VStack(spacing: 30) {
             image
                 .resizable()

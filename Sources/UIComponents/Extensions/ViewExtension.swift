@@ -42,7 +42,7 @@ extension View {
             .accessibilityAddTraits(traits ?? [])
     }
     
-    func validate(with regexPattern: String, text: Binding<String>) -> some View {
+    public func validate(with regexPattern: String, text: Binding<String>) -> some View {
         self.modifier(RegexValidator(text: text, regexPattern: regexPattern))
     }
     
