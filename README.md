@@ -31,6 +31,7 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  [Update app view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/UpdateAppView)
 - [x]  [ScrollTransitions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ScrollTransitions)
 - [x]  [Checkbox](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Checkbox)
+- [x]  [TextField](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/TextField)
 - [ ]  SideMenu
 
 ## Authors
