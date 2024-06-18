@@ -42,6 +42,9 @@ extension View {
             .accessibilityAddTraits(traits ?? [])
     }
     
+    func validate(with regexPattern: String, text: Binding<String>) -> some View {
+        self.modifier(RegexValidator(text: text, regexPattern: regexPattern))
+    }
     
     // MARK: - Scroll Transitions
     public func scrollTransition() -> some View {
