@@ -19,14 +19,24 @@ import SwiftUI
 
  - Note: The view uses SwiftUI's `TextField` and applies the specified configurations.
  */
-struct CustomTextField: View {
+public struct CustomTextField: View {
     @Binding var text: String
     var placeholder: Text = Text("")
     var keyboardType: UIKeyboardType = .default
     var charactersLimit: Int? = nil
     var borderColor: Color? = Color(UIColor.separator)
     
-    var body: some View {
+    public init(text: Binding<String>, placeholder: Text,
+                keyboardType: UIKeyboardType = .default, charactersLimit: Int? = nil,
+                borderColor: Color? = nil) {
+        self._text = text
+        self.placeholder = placeholder
+        self.keyboardType = keyboardType
+        self.charactersLimit = charactersLimit
+        self.borderColor = borderColor
+    }
+    
+    public var body: some View {
         TextField("", text: $text, prompt: placeholder, axis: .vertical)
             .keyboardType(keyboardType)
             .padding()

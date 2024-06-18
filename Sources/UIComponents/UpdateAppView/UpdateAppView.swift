@@ -22,7 +22,7 @@ import SwiftUI
 
  - Note: The view includes a button that, when pressed, opens the specified `appStoreURL` if provided.
  */
-struct UpdateAppView: View {
+public struct UpdateAppView: View {
     var title: LocalizedStringKey
     var description: LocalizedStringKey? = nil
     var buttonText: LocalizedStringKey
@@ -31,7 +31,19 @@ struct UpdateAppView: View {
     var buttonBackgroundColor: Color = .blue.opacity(0.8)
     var image: Image = Image(systemName: "icloud.and.arrow.down")
     var appStoreURL: URL?
-    var body: some View {
+    
+    public init(title: LocalizedStringKey, description: LocalizedStringKey? = nil, buttonText: LocalizedStringKey, backgroundColor: Color, buttonForegroundColor: Color, buttonBackgroundColor: Color, image: Image, appStoreURL: URL? = nil) {
+        self.title = title
+        self.description = description
+        self.buttonText = buttonText
+        self.backgroundColor = backgroundColor
+        self.buttonForegroundColor = buttonForegroundColor
+        self.buttonBackgroundColor = buttonBackgroundColor
+        self.image = image
+        self.appStoreURL = appStoreURL
+    }
+    
+    public var body: some View {
         VStack {
             Text(title)
                 .font(.title)
