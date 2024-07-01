@@ -15,7 +15,7 @@ final class UserDefaultsManagerTests: XCTestCase {
         let key = "testStructKey"
         let suiteName = "com.example.MyApp"
         
-        let result = UserDefaultsManager().saveStructToUserDefaults(myStruct, forKey: key, suiteName: suiteName)
+        let result = UserDefaultsManager.saveStructToUserDefaults(myStruct, forKey: key, suiteName: suiteName)
         
         XCTAssertTrue(result, "Saving struct to UserDefaults should return true")
         
@@ -43,16 +43,35 @@ final class UserDefaultsManagerTests: XCTestCase {
         let suiteName = "com.example.MyApp"
         
         // Save the struct to UserDefaults
-        _ = UserDefaultsManager().saveStructToUserDefaults(testStruct, forKey: key, suiteName: suiteName)
+        _ = UserDefaultsManager.saveStructToUserDefaults(testStruct, forKey: key, suiteName: suiteName)
         
         // Act
-        let loadedStruct: TestStruct? = UserDefaultsManager().loadStructFromUserDefaults(TestStruct.self, forKey: key, suiteName: suiteName)
+        let loadedStruct: TestStruct? = UserDefaultsManager.loadStructFromUserDefaults(TestStruct.self, forKey: key, suiteName: suiteName)
         
         // Assert
         XCTAssertNotNil(loadedStruct, "Loaded struct should not be nil")
         XCTAssertEqual(loadedStruct?.name, "John", "Loaded struct's name should be 'John'")
         XCTAssertEqual(loadedStruct?.age, 30, "Loaded struct's age should be 30")
     }
+    
+    func testRemoveUserDefaultsData() {
+        let suiteName = "com.example.MyApp"
+        let userDefaults = UserDefaults(suiteName: suiteName)!
+        let testKey = "myStructKey"
+        
+        let testStruct = TestStruct(name: "Test Name", age: 30)
+        if let encodedData = try? JSONEncoder().encode(testStruct) {
+            userDefaults.set(encodedData, forKey: testKey)
+        }
+        
+        // Ensure the data was saved
+        XCTAssertNotNil(userDefaults.data(forKey: testKey))
+        
+        UserDefaultsManager.removeUserDefaultsData(forKey: testKey, suiteName: suiteName)
+        
+        XCTAssertNil(userDefaults.data(forKey: testKey))
+    }
+
 }
 
 struct TestStruct: Codable {

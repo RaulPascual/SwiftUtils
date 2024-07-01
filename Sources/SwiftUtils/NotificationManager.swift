@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-public struct NotificationManager{
+public struct NotificationManager {
     
     public init() {}
     
