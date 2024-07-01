@@ -40,6 +40,7 @@ public enum ToastStyle {
     case success
     case info
     case warning
+    case custom(Color)
     
     var backgroundColor: Color {
         switch self {
@@ -51,6 +52,8 @@ public enum ToastStyle {
             return Color.blue
         case .warning:
             return Color.yellow
+        case .custom(let color):
+                    return color
         }
     }
 }
@@ -61,7 +64,7 @@ struct ToastExampleView: View {
         VStack {
             Text("Toast View!")
         }
-        .toast(isShowing: $isShowing, message: "Hi, this is a toast!", style: .success, duration: 5.0)
+        .toast(isShowing: $isShowing, message: "Hi, this is a toast!", style: .custom(.mint), duration: 5.0)
     }
 }
 
