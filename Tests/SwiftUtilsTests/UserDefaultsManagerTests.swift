@@ -67,10 +67,8 @@ final class UserDefaultsManagerTests: XCTestCase {
         // Ensure the data was saved
         XCTAssertNotNil(userDefaults.data(forKey: testKey))
         
-        // Call the removeUserDefaultsData function
         UserDefaultsManager.removeUserDefaultsData(forKey: testKey, suiteName: suiteName)
         
-        // Check if the data was removed
         XCTAssertNil(userDefaults.data(forKey: testKey))
     }
 
