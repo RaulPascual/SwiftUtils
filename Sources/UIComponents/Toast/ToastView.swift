@@ -6,7 +6,18 @@
 //
 
 import SwiftUI
+/**
+ A view representing a toast notification with customizable appearance.
 
+ - Parameters:
+    - message: The message text to be displayed in the toast.
+    - style: The style of the toast, which determines its background color. Default is `.info`.
+    - foregroundColor: The color of the message text. Default is white.
+    - cornerRadius: The corner radius of the toast's background. Default is 8.
+    - shadowRadius: The shadow radius of the toast's background. Default is 0.
+
+ - Note: The `ToastStyle` enumeration defines different styles for the toast notification.
+ */
 public struct ToastView: View {
     let message: String
     var style: ToastStyle = .info
@@ -35,30 +46,7 @@ public struct ToastView: View {
     }
 }
 
-public enum ToastStyle {
-    case error
-    case success
-    case info
-    case warning
-    case custom(Color)
-    
-    var backgroundColor: Color {
-        switch self {
-        case .error:
-            return Color.red
-        case .success:
-            return Color.green
-        case .info:
-            return Color.blue
-        case .warning:
-            return Color.yellow
-        case .custom(let color):
-                    return color
-        }
-    }
-}
-
-struct ToastExampleView: View {
+struct ExampleToastView: View {
     @Binding var isShowing: Bool
     var body: some View {
         VStack {
@@ -69,5 +57,5 @@ struct ToastExampleView: View {
 }
 
 #Preview {
-    ToastExampleView(isShowing: .constant(true))
+    ExampleToastView(isShowing: .constant(true))
 }

@@ -62,27 +62,3 @@ public struct ToastModifier: ViewModifier {
         }
     }
 }
-
-public extension View {
-    func toast(
-        isShowing: Binding<Bool>,
-        message: String,
-        style: ToastStyle,
-        duration: TimeInterval = 2.0,
-        foregroundColor: Color = .white,
-        cornerRadius: CGFloat = 8,
-        shadowRadius: CGFloat = 0
-    ) -> some View {
-        self.modifier(
-            ToastModifier(
-                isShowing: isShowing,
-                message: message,
-                style: style,
-                duration: duration,
-                foregroundColor: foregroundColor,
-                cornerRadius: cornerRadius,
-                shadowRadius: shadowRadius
-            )
-        )
-    }
-}

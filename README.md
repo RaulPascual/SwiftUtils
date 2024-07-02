@@ -32,7 +32,7 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  [ScrollTransitions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ScrollTransitions)
 - [x]  [Checkbox](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Checkbox)
 - [x]  [TextField](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/TextField)
-- [ ]  SideMenu
+- [x]  [Toast](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Toast)
 
 ## Authors
 
