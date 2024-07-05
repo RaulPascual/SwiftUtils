@@ -23,14 +23,24 @@ To use this SPM, add the following URL as dependency in your project
 
 
 ## Components (WIP)
+
+### [Checkbox](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Checkbox)
+https://github.com/RaulPascual/SwiftUtils/assets/32883174/b33c610e-f933-438e-878e-ea47d31442b7
+
+### [Sheet (semi-modal)](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/CustomSheet)
+https://github.com/RaulPascual/SwiftUtils/assets/32883174/278cdde4-b2d8-4287-857d-93243afb6b15
+
+###  [Floating button](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/FloatingButton)
+https://github.com/RaulPascual/SwiftUtils/assets/32883174/f9799af7-6e2b-4416-b8c5-1632a4373db3
+
+### [Hyperlink](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Hyperlink)
+![image](https://github.com/RaulPascual/SwiftUtils/assets/32883174/a013ba1d-a24e-46ec-87e1-551c65de8d57)
+
+
 - [x]  [Onboarding view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Onboarding)
-- [x]  [Sheet (semi-modal)](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/CustomSheet)
-- [x]  [Hyperlink](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Hyperlink)
 - [x]  [ImageViwer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ImageViwer)
-- [x]  [Floating button](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/FloatingButton)
 - [x]  [Update app view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/UpdateAppView)
 - [x]  [ScrollTransitions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ScrollTransitions)
-- [x]  [Checkbox](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Checkbox)
 - [x]  [TextField](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/TextField)
 - [x]  [Toast](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Toast)
 
