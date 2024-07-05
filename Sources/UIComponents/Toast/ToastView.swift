@@ -36,13 +36,16 @@ public struct ToastView: View {
     
     public var body: some View {
         VStack {
-            Text(message)
-                .padding()
-                .background(style.backgroundColor.opacity(0.8))
-                .foregroundColor(foregroundColor)
-                .cornerRadius(cornerRadius)
-                .shadow(radius: shadowRadius)
+            HStack {
+                style.toastIcon
+                Text(message)
+            }
         }
+        .padding()
+        .background(style.backgroundColor.opacity(0.8))
+        .foregroundColor(foregroundColor)
+        .cornerRadius(cornerRadius)
+        .shadow(radius: shadowRadius)
     }
 }
 
@@ -52,7 +55,7 @@ struct ExampleToastView: View {
         VStack {
             Text("Toast View!")
         }
-        .toast(isShowing: $isShowing, message: "Hi, this is a toast!", style: .custom(.mint), duration: 5.0)
+        .toast(isShowing: $isShowing, message: "Hi, this is a toast!", style: .error, duration: 5.0)
     }
 }
 
