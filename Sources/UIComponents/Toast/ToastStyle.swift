@@ -12,7 +12,7 @@ public enum ToastStyle {
     case success
     case info
     case warning
-    case custom(Color)
+    case custom(Color, Image)
     
     public var backgroundColor: Color {
         switch self {
@@ -24,8 +24,27 @@ public enum ToastStyle {
             return Color.blue
         case .warning:
             return Color.yellow
-        case .custom(let color):
+        case .custom(let color, _):
                     return color
+        }
+    }
+    
+    public var toastIcon: Image {
+        switch self {
+        case .error:
+            return Image(systemName: "xmark.circle.fill")
+            
+        case .success:
+            return Image(systemName: "checkmark.circle.fill")
+            
+        case .info:
+            return Image(systemName: "info.circle.fill")
+            
+        case .warning:
+            return Image(systemName: "exclamationmark.triangle.fill")
+            
+        case .custom(_, let icon):
+            return icon
         }
     }
 }
