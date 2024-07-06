@@ -6,7 +6,12 @@
 //
 
 import SwiftUI
+/**
+ A view representing a single tag.
 
+ - Parameters:
+    - tag: A binding to a `TagModel` object representing the tag to be displayed.
+ */
 public struct TagView: View {
     @Binding var tag: TagModel
     

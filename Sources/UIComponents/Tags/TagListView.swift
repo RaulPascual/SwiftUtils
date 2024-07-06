@@ -6,7 +6,12 @@
 //
 
 import SwiftUI
+/**
+ A view displaying a list of tags.
 
+ - Parameters:
+    - tags: A binding to an array of `TagModel` objects representing the tags to be displayed.
+ */
 public struct TagsListView: View {
     @Binding var tags: [TagModel]
     
@@ -29,14 +34,14 @@ public struct TagsListView: View {
 }
 
 struct ExampleTagsListView: View {
-    @State var tags: [TagModel] = [TagModel(text: "Filter 1",color: .blue),
-                                   TagModel(text: "Filter 2", color: .purple),
-                                   TagModel(text: "Filter 3", color: .purple),
-                                   TagModel(text: "Filter 4", color: .purple),
-                                   TagModel(text: "Filter 5", color: .purple),
-                                   TagModel(text: "Filter 6", color: .purple),
-                                   TagModel(text: "Filter 7", color: .purple),
-                                   TagModel(text: "Filter 8", color: .purple)]
+    @State var tags: [TagModel] = [TagModel(text: "Filter 1",color: .blue, isSelected: true),
+                                   TagModel(text: "Filter 2", color: .blue),
+                                   TagModel(text: "Filter 3", color: .blue),
+                                   TagModel(text: "Filter 4", color: .blue, isSelected: true),
+                                   TagModel(text: "Filter 5", color: .blue, isSelected: true),
+                                   TagModel(text: "Filter 6", color: .blue),
+                                   TagModel(text: "Filter 7", color: .blue),
+                                   TagModel(text: "Filter 8", color: .blue)]
     var body: some View {
         TagsListView(tags: $tags)
     }
