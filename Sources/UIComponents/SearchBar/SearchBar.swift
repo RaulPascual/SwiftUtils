@@ -89,7 +89,7 @@ struct ExampleSearchBar: View {
     var body: some View {
         SearchBar(
             text: $text,
-            placeholder: "Search something",
+            placeholder: "Search",
             icon: Image(systemName: "magnifyingglass"),
             iconPosition: .leading,
             borderRadius: 8,
