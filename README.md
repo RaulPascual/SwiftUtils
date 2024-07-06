@@ -36,6 +36,10 @@ https://github.com/RaulPascual/SwiftUtils/assets/32883174/f9799af7-6e2b-4416-b8c
 ### [Hyperlink](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Hyperlink)
 ![image](https://github.com/RaulPascual/SwiftUtils/assets/32883174/a013ba1d-a24e-46ec-87e1-551c65de8d57)
 
+### [SearchBar](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/SearchBar)
+![image](https://github.com/RaulPascual/SwiftUtils/assets/32883174/63685c72-b4f5-411e-a7f2-6d211eeffccf)
+
+
 
 - [x]  [Onboarding view](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Onboarding)
 - [x]  [ImageViwer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ImageViwer)
