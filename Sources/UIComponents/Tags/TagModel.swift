@@ -12,4 +12,10 @@ public struct TagModel: Identifiable {
     var text: String
     var color: Color
     var isSelected: Bool = false
+    
+    public init(text: String, color: Color, isSelected: Bool = false) {
+        self.text = text
+        self.color = color
+        self.isSelected = isSelected
+    }
 }
