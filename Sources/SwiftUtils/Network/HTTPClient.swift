@@ -45,7 +45,12 @@ extension HTTPClient {
         }
         
         do {
-            return try await processResponse(request: request, responseModel: responseModel)
+            return try await processResponse(
+                request: request,
+                responseModel: responseModel,
+                urlForDebugView: url,
+                endpointForDebugView: endpoint
+            )
         } catch {
             return .failure(.unknown)
         }
@@ -73,13 +78,36 @@ extension HTTPClient {
     private func processResponse<T: Decodable>(
         enableDebug: Bool = false,
         request: URLRequest,
-        responseModel: T.Type
+        responseModel: T.Type,
+        urlForDebugView: URL,
+        endpointForDebugView: Endpoint
     ) async throws -> Result<T, RequestError> {
         let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             return .failure(.noResponse)
         }
+        
+        // Convert data to String
+        guard let jsonResponseString = String(data: data, encoding: .utf8) else {
+            return .failure(.decode)
+        }
+        
+        DebugViewHTTPS.shared.requestsList.append(
+         DebugViewHTTPS.Request(
+             endpoint: urlForDebugView.absoluteString,
+             method: endpointForDebugView.method.rawValue,
+             date: Date.now,
+             body: endpointForDebugView.body ?? "nil",
+             response: DebugViewHTTPS.Response(
+                 endpoint: httpResponse.url?.absoluteString ?? "",
+                 date: Date.now,
+                 response: jsonResponseString,
+                 statusCode: String(httpResponse.statusCode)
+             ),
+             requestOverviewInfo: [:]
+         )
+        )
         
         switch httpResponse.statusCode {
         case 200...299:
