@@ -20,6 +20,8 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  [Network layer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/SwiftUtils/Network)
 - [x]  [Date manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DateFormatManager.swift)
 - [x]  [Haptic Vibrations](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/HapticVibration.swift)
+- [x]  [App Coordinator](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/AppCoordinator)
+- [x]  [HTTP monitor](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DebugView)
 
 
 ## Components (WIP)

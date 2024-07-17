@@ -46,6 +46,7 @@ extension HTTPClient {
         
         do {
             return try await processResponse(
+                enableDebug: enableDebug,
                 request: request,
                 responseModel: responseModel,
                 urlForDebugView: url,
@@ -76,7 +77,7 @@ extension HTTPClient {
         - Any other status code or inability to decode the response results in an unknown error.
      */
     private func processResponse<T: Decodable>(
-        enableDebug: Bool = false,
+        enableDebug: Bool,
         request: URLRequest,
         responseModel: T.Type,
         urlForDebugView: URL,
