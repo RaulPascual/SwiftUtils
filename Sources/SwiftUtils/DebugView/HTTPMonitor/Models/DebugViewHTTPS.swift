@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-class DebugViewHTTPS: ObservableObject {
-    static let shared = DebugViewHTTPS()
+public class DebugViewHTTPS: ObservableObject {
+    public static let shared = DebugViewHTTPS()
     
     @Published var response = "false"
     @Published var responsesList: [Response] = []
@@ -22,6 +22,7 @@ class DebugViewHTTPS: ObservableObject {
         var statusCode: String
         var responseHeaders: [String: String]?
     }
+    
     struct Request: Identifiable {
         let id = UUID()
         var endpoint: String
