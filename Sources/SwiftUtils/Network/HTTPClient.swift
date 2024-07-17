@@ -88,26 +88,28 @@ extension HTTPClient {
             return .failure(.noResponse)
         }
         
-        // Convert data to String
-        guard let jsonResponseString = String(data: data, encoding: .utf8) else {
-            return .failure(.decode)
+        if enableDebug {
+            // Convert data to String
+            guard let jsonResponseString = String(data: data, encoding: .utf8) else {
+                return .failure(.decode)
+            }
+            
+            DebugViewHTTPS.shared.requestsList.append(
+                DebugViewHTTPS.Request(
+                    endpoint: urlForDebugView.absoluteString,
+                    method: endpointForDebugView.method.rawValue,
+                    date: Date.now,
+                    body: endpointForDebugView.body ?? "nil",
+                    response: DebugViewHTTPS.Response(
+                        endpoint: httpResponse.url?.absoluteString ?? "",
+                        date: Date.now,
+                        response: jsonResponseString,
+                        statusCode: String(httpResponse.statusCode)
+                    ),
+                    requestOverviewInfo: [:]
+                )
+            )
         }
-        
-        DebugViewHTTPS.shared.requestsList.append(
-         DebugViewHTTPS.Request(
-             endpoint: urlForDebugView.absoluteString,
-             method: endpointForDebugView.method.rawValue,
-             date: Date.now,
-             body: endpointForDebugView.body ?? "nil",
-             response: DebugViewHTTPS.Response(
-                 endpoint: httpResponse.url?.absoluteString ?? "",
-                 date: Date.now,
-                 response: jsonResponseString,
-                 statusCode: String(httpResponse.statusCode)
-             ),
-             requestOverviewInfo: [:]
-         )
-        )
         
         switch httpResponse.statusCode {
         case 200...299:
