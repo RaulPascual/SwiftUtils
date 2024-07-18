@@ -17,7 +17,7 @@ public class DebugViewHTTPS: ObservableObject {
     struct Response: Identifiable {
         let id = UUID()
         var endpoint: String
-        var date: Date
+        var date: Date?
         var response: String
         var statusCode: String
         var responseHeaders: [String: String]?
