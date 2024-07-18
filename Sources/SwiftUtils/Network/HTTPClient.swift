@@ -33,6 +33,7 @@ extension HTTPClient {
             return .failure(.invalidURL)
         }
         
+        let requestDate = Date.now
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.allHTTPHeaderFields = endpoint.header
@@ -45,7 +46,14 @@ extension HTTPClient {
         }
         
         do {
-            return try await processResponse(request: request, responseModel: responseModel)
+            return try await processResponse(
+                enableDebug: enableDebug,
+                request: request,
+                responseModel: responseModel,
+                urlForDebugView: url,
+                endpointForDebugView: endpoint, 
+                requestDate: requestDate
+            )
         } catch {
             return .failure(.unknown)
         }
@@ -71,14 +79,40 @@ extension HTTPClient {
         - Any other status code or inability to decode the response results in an unknown error.
      */
     private func processResponse<T: Decodable>(
-        enableDebug: Bool = false,
+        enableDebug: Bool,
         request: URLRequest,
-        responseModel: T.Type
+        responseModel: T.Type,
+        urlForDebugView: URL,
+        endpointForDebugView: Endpoint,
+        requestDate: Date
     ) async throws -> Result<T, RequestError> {
         let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             return .failure(.noResponse)
+        }
+        
+        if enableDebug {
+            // Convert data to String
+            guard let jsonResponseString = String(data: data, encoding: .utf8) else {
+                return .failure(.decode)
+            }
+            
+            DebugViewHTTPS.shared.requestsList.append(
+                DebugViewHTTPS.Request(
+                    endpoint: urlForDebugView.absoluteString,
+                    method: endpointForDebugView.method.rawValue,
+                    date: requestDate,
+                    body: endpointForDebugView.body ?? "nil",
+                    response: DebugViewHTTPS.Response(
+                        endpoint: httpResponse.url?.absoluteString ?? "",
+                        date:self.getDateFromResponse(response: httpResponse),
+                        response: jsonResponseString,
+                        statusCode: String(httpResponse.statusCode)
+                    ),
+                    requestOverviewInfo: [:]
+                )
+            )
         }
         
         switch httpResponse.statusCode {
@@ -129,5 +163,28 @@ extension HTTPClient {
         if enableDebug {
             print(message)
         }
+    }
+    
+    /**
+     Extracts and parses the date from the "Date" header field of an HTTP response.
+
+     - Parameters:
+        - response: An `HTTPURLResponse` object from which the date is extracted.
+
+     - Returns: A `Date` object if the date string can be parsed, otherwise `nil`.
+
+     - Note: The date string is expected to be in the format "E, dd MMM yyyy HH:mm:ss z" (e.g., "Tue, 15 Nov 1994 08:12:31 GMT").
+     */
+    private func getDateFromResponse(response: HTTPURLResponse) -> Date? {
+        guard let dateString = response.allHeaderFields["Date"] as? String else {
+            return nil
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E, dd MMM yyyy HH:mm:ss z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return dateFormatter.date(from: dateString)
     }
 }
