@@ -15,7 +15,7 @@ extension UIWindow {
 
    override open func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
        if motion == .motionShake {
-           AppCoordinator.shared.isDebugViewActive = true
+           AppCoordinator.shared.isDebugViewActive.toggle()
        }
    }
 }

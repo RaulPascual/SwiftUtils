@@ -49,6 +49,16 @@ public struct RequestDetailsView: View {
         }
     }
     
+    /**
+     Calculates the elapsed time between two dates and returns a formatted string.
+
+     This function calculates the time interval between two given dates. If the interval is less than one second, it returns the elapsed time in milliseconds. Otherwise, it returns the elapsed time in seconds with two decimal places.
+
+     - Parameters:
+        - startDate: The start date.
+        - endDate: The end date.
+     - Returns: A formatted string representing the elapsed time in either milliseconds or seconds.
+     */
     private func elapsedTime(from startDate: Date, to endDate: Date) -> String {
         let interval = endDate.timeIntervalSince(startDate) // Diff in seconds
         
