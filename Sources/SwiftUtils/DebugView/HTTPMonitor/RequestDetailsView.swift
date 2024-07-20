@@ -13,69 +13,37 @@ public struct RequestDetailsView: View {
     
     public var body: some View {
         let requestDate = requestDetails.date
-        let responseDate = requestDetails.response?.date
-
+        let responseDate = requestDetails.response?.date ?? Date()
+        
         ScrollView {
             VStack(alignment: .leading, spacing: 8) {
                 Group {
-                    HStack {
-                        Text("Request date:").bold()
-                        Text(requestDate, format: dateFormat)
-                    }
+                    RequestLineInformationView(lineTitle: "Request date:", lineDate: requestDate)
                     
-                    HStack {
-                        Text("Response date:").bold()
-                        if let responseDate = responseDate {
-                            Text(responseDate, format: dateFormat)
-                        } else {
-                            Text("nil")
-                        }
-                    }
+                    RequestLineInformationView(lineTitle: "Response date:", lineDate: responseDate)
                     
-                    if let responseDate = responseDate {
-                        HStack {
-                            Text("Duration:").bold()
-                            Text(elapsedTime(from: requestDate, to: responseDate))
-                        }
-                    }
+                    RequestLineInformationView(lineTitle: "Duration:",
+                                           lineInformation: elapsedTime(from: requestDate,
+                                                                        to: responseDate))
                     
-                    HStack {
-                        Text("Method:").bold()
-                        Text(requestDetails.method)
-                    }
-                    .padding(.bottom, 4)
+                    RequestLineInformationView(lineTitle: "Method:", lineInformation: requestDetails.method)
                     
-                    VStack(alignment: .leading) {
-                        Text("Endpoint:").bold()
-                        Text(requestDetails.endpoint)
-                    }
-                    .padding(.bottom, 4)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Request Headers:").bold()
-                        Text(requestDetails.headers?.description ?? "No request headers")
-                    }
+                    RequestLineInformationView(lineTitle: "Endpoint:", lineInformation: requestDetails.endpoint)
                 }
                 .padding(.horizontal)
                 
                 Group {
-                    DisclosureGroup {
-                        ScrollView {
-                            Text(requestDetails.body)
-                        }
-                    } label: {
-                        Text("Request Body:").bold()
-                    }
-                    .padding()
+                    BodyDisclosureGroup(title: "Request Headers:", 
+                                        bodyText: requestDetails.headers?.description ?? "No request headers")
                     
-                    DisclosureGroup {
-                        ScrollView {
-                            Text(requestDetails.response?.response ?? "No response body")
-                        }
-                    } label: {
-                        Text("Response Body:").bold()
-                    }
-                    .padding()
+                    BodyDisclosureGroup(title: "Response Headers:", 
+                                        bodyText: requestDetails.response?.responseHeaders?.description ?? "No response headers")
+                    
+                    BodyDisclosureGroup(title: "Request Body:",
+                                        bodyText: requestDetails.body)
+                    
+                    BodyDisclosureGroup(title: "Response Body:", 
+                                        bodyText: requestDetails.response?.response ?? "No response body")
                 }
             }
         }
@@ -93,6 +61,46 @@ public struct RequestDetailsView: View {
         }
     }
 }
+
+struct BodyDisclosureGroup: View {
+    var title: String
+    var bodyText: String
+    
+    var body: some View {
+        DisclosureGroup {
+            ScrollView {
+                Text(bodyText)
+            }
+        } label: {
+            Text(title).bold()
+        }
+        .padding()
+    }
+}
+
+public struct RequestLineInformationView: View {
+    var lineTitle: String
+    var lineInformation: String? = nil
+    var lineDate: Date? = nil
+    
+    static let dateFormat = Date.FormatStyle(date: .numeric, time: .standard)
+        .hour(.twoDigits(amPM: .abbreviated))
+        .minute(.twoDigits)
+        .second(.twoDigits)
+    
+    public var body: some View {
+        HStack {
+            Text(lineTitle)
+                .bold()
+            if let date = lineDate {
+                Text(date, format: RequestLineInformationView.dateFormat)
+            } else {
+                Text(lineInformation ?? "(nil)")
+            }
+        }
+    }
+}
+
 
 #Preview {
     RequestDetailsView(

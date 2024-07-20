@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if DEBUG || DEV
 extension UIWindow {
    override open var canBecomeFirstResponder: Bool {
        return true
@@ -18,4 +19,4 @@ extension UIWindow {
        }
    }
 }
-
+#endif
