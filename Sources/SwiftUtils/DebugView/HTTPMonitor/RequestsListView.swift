@@ -58,6 +58,8 @@ struct RequestsListView: View {
                 }
             }
         }
+        .navigationTitle("HTTPS Response")
+        .navigationBarTitleDisplayMode(.inline)
         .padding(.horizontal)
     }
     
