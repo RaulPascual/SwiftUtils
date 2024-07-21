@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if DEBUG || DEV
 extension UIWindow {
    override open var canBecomeFirstResponder: Bool {
        return true
@@ -14,8 +15,8 @@ extension UIWindow {
 
    override open func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
        if motion == .motionShake {
-           AppCoordinator.shared.isDebugViewActive = true
+           AppCoordinator.shared.isDebugViewActive.toggle()
        }
    }
 }
-
+#endif
