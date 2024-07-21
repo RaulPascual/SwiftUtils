@@ -1,6 +1,6 @@
 //
 //  DebugView.swift
-//  
+//
 //
 //  Created by Raul on 16/7/24.
 //
@@ -13,8 +13,12 @@ struct DebugView: View {
     var body: some View {
         List {
             Section(header: Text("Welcome to Debug View").bold()) {
-                    NavigationLink(destination: RequestsListView(list: debugHTTPS)) {
-                        Text("HTTPS Response")
+                NavigationLink(destination: RequestsListView(list: debugHTTPS)) {
+                    Text("HTTPS Response")
+                }
+                
+                NavigationLink(destination: UserDefaultListView()) {
+                    Text("UserDefaults Viewer")
                 }
             }
         }

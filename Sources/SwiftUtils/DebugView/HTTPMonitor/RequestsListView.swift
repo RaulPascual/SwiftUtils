@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIComponents
 
 struct RequestsListView: View {
     var list: DebugViewHTTPS
@@ -22,8 +21,11 @@ struct RequestsListView: View {
     
     var body: some View {
         VStack {
-            SearchBar(text: $filteredEndpoint,
-                      placeholder: "Filter by endpoint")
+            TextField(text: $filteredEndpoint,
+                      prompt: Text("Filter by endpoint"),
+                      label: {
+                Text("Filter by endpoint")
+            })
             .padding(.bottom, 6)
             
             Picker("Request Type", selection: $selectedRequestType) {
