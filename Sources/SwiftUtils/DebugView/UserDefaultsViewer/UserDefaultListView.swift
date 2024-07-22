@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-public struct UserDefaultListView: View {
-    @State var viewModel = UserDefaultListViewModel()
+struct UserDefaultListView: View {
+    @StateObject var viewModel = UserDefaultListViewModel()
     
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .leading) {
             Group {
                 Text("You can swipe from the right of the list item to remove it.")
@@ -21,27 +21,17 @@ public struct UserDefaultListView: View {
             .padding(.horizontal)
             
             HStack {
-                TextField(text: $viewModel.keyText,
-                          prompt: Text("Key")) {
-                    Text("Key")
-                }
-                          .padding(.all, 2)
-                          .border(.cyan)
+                TextField("Key", text: $viewModel.keyText)
+                    .padding(.all, 2)
+                    .border(.cyan)
                 
-                TextField(text: $viewModel.valueText,
-                          prompt: Text("Value")) {
-                    Text("Value")
-                }
-                          .padding(.all, 2)
-                          .border(.cyan)
+                TextField("Value", text: $viewModel.valueText)
+                    .padding(.all, 2)
+                    .border(.cyan)
                 
-                Button {
-                    self.viewModel.addUserDefaultsValue(forKey: viewModel.keyText,
-                                              value: viewModel.valueText)
-                } label: {
-                    Text("Add value")
+                Button("Add value") {
+                    viewModel.addUserDefaultsValue(forKey: viewModel.keyText, value: viewModel.valueText)
                 }
-                
             }
             .padding(.horizontal)
             
@@ -55,8 +45,7 @@ public struct UserDefaultListView: View {
                         }
                         .swipeActions {
                             Button("Remove key") {
-                                self.viewModel.removeUserDefaultsValue(forKey: key)
-                                self.viewModel.userDefaults = self.viewModel.getAllUserDefaultsValues()
+                                viewModel.removeUserDefaultsValue(forKey: key)
                             }
                             .tint(.red)
                         }
@@ -67,13 +56,9 @@ public struct UserDefaultListView: View {
             .navigationTitle("User Defaults")
             .toolbarTitleDisplayMode(.inline)
         }
-        .onAppear {
-            self.viewModel.userDefaults = self.viewModel.getAllUserDefaultsValues()
-        }
     }
 }
 
 #Preview {
     UserDefaultListView()
 }
-
