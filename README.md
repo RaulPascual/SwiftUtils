@@ -21,7 +21,9 @@ To use this SPM, add the following URL as dependency in your project
 - [x]  [Date manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DateFormatManager.swift)
 - [x]  [Haptic Vibrations](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/HapticVibration.swift)
 - [x]  [App Coordinator](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/AppCoordinator)
-- [x]  [HTTP monitor](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DebugView)
+- [x]  [Debug view](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DebugView)
+  - [x] HTTP Request monitor
+  - [x] User defaults viewer and modifier
 
 
 ## Components (WIP)
