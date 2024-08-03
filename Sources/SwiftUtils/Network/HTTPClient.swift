@@ -25,7 +25,7 @@ extension HTTPClient {
      - Throws: `RequestError` if the request fails or the response cannot be decoded.
      */
     public func sendRequest<T: Decodable>(
-        enableDebug: Bool = false,
+        enableDebug: Bool = true,
         endpoint: Endpoint,
         responseModel: T.Type
     ) async -> Result<T, RequestError> {
@@ -106,7 +106,7 @@ extension HTTPClient {
                     body: endpointForDebugView.body ?? "nil",
                     response: DebugViewHTTPS.Response(
                         endpoint: httpResponse.url?.absoluteString ?? "",
-                        date:self.getDateFromResponse(response: httpResponse),
+                        date: Date.now,
                         response: jsonResponseString,
                         statusCode: String(httpResponse.statusCode)
                     ),
@@ -163,28 +163,5 @@ extension HTTPClient {
         if enableDebug {
             print(message)
         }
-    }
-    
-    /**
-     Extracts and parses the date from the "Date" header field of an HTTP response.
-
-     - Parameters:
-        - response: An `HTTPURLResponse` object from which the date is extracted.
-
-     - Returns: A `Date` object if the date string can be parsed, otherwise `nil`.
-
-     - Note: The date string is expected to be in the format "E, dd MMM yyyy HH:mm:ss z" (e.g., "Tue, 15 Nov 1994 08:12:31 GMT").
-     */
-    private func getDateFromResponse(response: HTTPURLResponse) -> Date? {
-        guard let dateString = response.allHeaderFields["Date"] as? String else {
-            return nil
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, dd MMM yyyy HH:mm:ss z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
-        return dateFormatter.date(from: dateString)
     }
 }
