@@ -37,7 +37,7 @@ public struct RootView<Content: AppModuleView>: View {
     
     public var body: some View {
         getRootView(module: viewRouter.selectedModule)
-            .fullScreenCover(isPresented: $viewRouter.isDebugViewActive) {
+            .sheet(isPresented: $viewRouter.isDebugViewActive) {
                 NavigationStack {
                     DebugView()
                 }

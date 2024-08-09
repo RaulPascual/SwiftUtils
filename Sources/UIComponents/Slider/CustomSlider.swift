@@ -46,6 +46,7 @@ public struct CustomSlider: View {
                         self.currentValue -= step
                     } label: {
                         Image(systemName: "minus")
+                            .tint(backgroundColor)
                     }
                     .disabled(currentValue <= minValue)
                 }
@@ -63,6 +64,7 @@ public struct CustomSlider: View {
                         self.currentValue += step
                     } label: {
                         Image(systemName: "plus")
+                            .tint(backgroundColor)
                     }
                     .disabled(currentValue >= maxValue)
                 }
@@ -84,7 +86,7 @@ struct ExampleCustomSlider: View {
                 minValue: 0,
                 maxValue: 100,
                 step: 1,
-                backgroundColor: .blue,
+                backgroundColor: .green,
                 showButtons: true
             )
             .padding()
