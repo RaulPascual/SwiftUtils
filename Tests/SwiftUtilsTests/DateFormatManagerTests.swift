@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftUtils
+@testable import SwiftUtilities
 
 final class DateFormatManagerTests: XCTestCase {
     
