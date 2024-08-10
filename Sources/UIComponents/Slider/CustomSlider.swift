@@ -69,7 +69,6 @@ public struct CustomSlider: View {
                     .disabled(currentValue >= maxValue)
                 }
             }
-            
         }
         .padding()
     }
@@ -79,7 +78,6 @@ struct ExampleCustomSlider: View {
     @State private var sliderValue: Double = 50.0
     
     var body: some View {
-        
         VStack {
             CustomSlider(
                 currentValue: $sliderValue,
@@ -95,7 +93,6 @@ struct ExampleCustomSlider: View {
                 .font(.headline)
                 .padding()
         }
-        
     }
 }
 

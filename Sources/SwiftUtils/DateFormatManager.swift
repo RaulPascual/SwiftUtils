@@ -108,38 +108,3 @@ public class DateFormatManager {
         dateFormatter.dateFormat = format
     }
 }
-
-
-// MARK: Implementation example
-struct DateFormatExampleView: View {
-    private let dateFormatManager = DateFormatManager()
-    private let currentDate = Date()
-    private let exampleStringDate = "2028-12-10"
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Current Date: \(currentDate)")
-                .font(.headline)
-            
-            VStack {
-                Text("Current date to custom String")
-                    .bold()
-                Text("\(dateFormatManager.string(date: currentDate, format: DateStrings.ddMMyyyy.rawValue))")
-            }
-            
-            
-            VStack {
-                Text("Example String to Date:")
-                    .bold()
-                Text(dateFormatManager.date(dateString: exampleStringDate,
-                                            format: DateStrings.yyyyMMdd.rawValue)?.description ?? "")
-            }
-            
-        }
-        .padding()
-    }
-}
-
-#Preview {
-    DateFormatExampleView()
-}
