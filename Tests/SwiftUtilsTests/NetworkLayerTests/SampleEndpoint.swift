@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUtils
+import SwiftUtilities
 
 // MARK: - Sample Endpoint
 enum CurrentCalendarEndpoint {

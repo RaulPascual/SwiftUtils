@@ -8,7 +8,7 @@
 import XCTest
 import Foundation
 
-@testable import SwiftUtils
+@testable import SwiftUtilities
 
 final class ArrayExtensionTests: XCTestCase {
     func testRemoveDuplicates() {

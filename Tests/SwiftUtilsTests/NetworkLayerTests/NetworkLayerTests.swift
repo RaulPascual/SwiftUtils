@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import SwiftUtils
+@testable import SwiftUtilities
 
 final class NetworkLayerTests: XCTestCase {
 
