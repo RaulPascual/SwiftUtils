@@ -16,6 +16,7 @@ To use this SPM, add the following URL as dependency in your project
 
 ## Utilities (WIP)
 - [x]  [User Defaults manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/UserDefaultsManager.swift)
+- [x]  [Keychain manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/KeychainManager.swift)
 - [x]  [Local Notification manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/NotificationManager.swift) 
 - [x]  [Network layer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/SwiftUtils/Network)
 - [x]  [Date manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DateFormatManager.swift)
