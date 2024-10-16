@@ -40,6 +40,8 @@ public struct RootView<Content: AppModuleView>: View {
             .sheet(isPresented: $viewRouter.isDebugViewActive) {
                 NavigationStack {
                     DebugView()
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
                 }
             }
     }

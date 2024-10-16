@@ -9,13 +9,14 @@ import SwiftUI
 
 struct RequestsListView: View {
     var list: DebugViewHTTPS
-    let requestTypes = ["GET", "POST", "PUT", "DELETE"]
-    @State private var selectedRequestType = "GET"
+    let requestTypes = ["ALL", "GET", "POST", "PUT", "DELETE"]
+    @State private var selectedRequestType = "ALL"
     @State private var filteredEndpoint = ""
     
     var filteredRequests: [DebugViewHTTPS.Request] {
         list.requestsList.filter { request in
-            request.method == selectedRequestType && (filteredEndpoint.isEmpty || request.endpoint.contains(filteredEndpoint))
+            (selectedRequestType == "ALL" || request.method == selectedRequestType) &&
+            (filteredEndpoint.isEmpty || request.endpoint.contains(filteredEndpoint))
         }
     }
     
