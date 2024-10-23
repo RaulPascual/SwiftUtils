@@ -98,21 +98,22 @@ extension HTTPClient {
                 return .failure(.decode)
             }
             
-            DebugViewHTTPS.shared.requestsList.append(
-                DebugViewHTTPS.Request(
-                    endpoint: urlForDebugView.absoluteString,
-                    method: endpointForDebugView.method.rawValue,
-                    date: requestDate,
-                    body: endpointForDebugView.body ?? "nil",
-                    response: DebugViewHTTPS.Response(
-                        endpoint: httpResponse.url?.absoluteString ?? "",
-                        date: Date.now,
-                        response: jsonResponseString,
-                        statusCode: String(httpResponse.statusCode)
-                    ),
-                    requestOverviewInfo: [:]
-                )
+            let request = DebugViewHTTPS.Request(
+                endpoint: urlForDebugView.absoluteString,
+                method: endpointForDebugView.method.rawValue,
+                date: requestDate,
+                body: endpointForDebugView.body ?? "nil",
+                response: DebugViewHTTPS.Response(
+                    endpoint: httpResponse.url?.absoluteString ?? "",
+                    date: Date.now,
+                    response: jsonResponseString,
+                    statusCode: String(httpResponse.statusCode)
+                ),
+                requestOverviewInfo: [:]
             )
+            
+            let debugView = DebugViewHTTPS.shared
+            await debugView.addRequestToList(request: request)
         }
         
         switch httpResponse.statusCode {

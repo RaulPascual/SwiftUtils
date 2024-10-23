@@ -26,7 +26,7 @@ import SwiftUI
  - Note: This class conforms to `ObservableObject` to allow SwiftUI views to observe its properties.
  */
 public class AppCoordinator: ObservableObject {
-    public static let shared = AppCoordinator()
+    @MainActor public static let shared = AppCoordinator()
     var showDebug = false
     @Published var selectedModule = AppModule.home
     @Published var isDebugViewActive = false

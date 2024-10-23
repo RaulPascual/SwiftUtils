@@ -126,15 +126,13 @@ public struct OnBoardView: View, Identifiable {
 }
 
 #Preview {
-    onboardingTestView
+    OnboardingView(primaryBackgroundColor: .blue,
+                                            onboardViews: [OnBoardView(id: UUID(),
+                                                                       image: Image(systemName: "figure.soccer"),
+                                                                       title: "Title 1",
+                                                                       description: "Description of first view"),
+                                                           OnBoardView(id: UUID(),
+                                                                       image: Image(systemName: "heart"),
+                                                                       title: "Title 2",
+                                                                       description: "Description of second view")])
 }
-
-let onboardingTestView = OnboardingView(primaryBackgroundColor: .blue,
-                                        onboardViews: [OnBoardView(id: UUID(),
-                                                                   image: Image(systemName: "figure.soccer"),
-                                                                   title: "Title 1",
-                                                                   description: "Description of first view"),
-                                                       OnBoardView(id: UUID(),
-                                                                   image: Image(systemName: "heart"),
-                                                                   title: "Title 2",
-                                                                   description: "Description of second view")])

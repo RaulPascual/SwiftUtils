@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-public class DebugViewHTTPS: ObservableObject {
+actor DebugViewHTTPS: ObservableObject {
     public static let shared = DebugViewHTTPS()
     
     @Published var responsesList: [Response] = []
-    @Published var requestsList: [Request] = []
+    @MainActor @Published var requestsList: [Request] = []
     
     struct Request: Identifiable, Hashable {
         static func == (lhs: Request, rhs: Request) -> Bool {
@@ -49,5 +49,10 @@ public class DebugViewHTTPS: ObservableObject {
         var response: String
         var statusCode: String
         var responseHeaders: [String: String]?
+    }
+    
+    @MainActor
+    func addRequestToList(request: Request) {
+        self.requestsList.append(request)
     }
 }
