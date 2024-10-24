@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class SearchBarTests: XCTestCase {
     func testsearchView() {
         let view = ExampleSearchBar()

@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class CheckboxTests: XCTestCase {
     func testCheckBox() {
         let view = ExampleCheckBoxView()

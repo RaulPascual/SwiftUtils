@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class LoaderViewsTests: XCTestCase {
     func testCircularLoader() {
         let view = CircularProgressLoaderView(color: .red, scale: 1.5)

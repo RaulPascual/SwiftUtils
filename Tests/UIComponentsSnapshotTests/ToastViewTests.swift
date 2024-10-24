@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class ToastViewTests: XCTestCase {
     func testToastView() {
         let view = ExampleToastView(isShowing: .constant(true))

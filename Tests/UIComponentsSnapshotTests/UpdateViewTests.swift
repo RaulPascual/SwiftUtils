@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class UpdateViewTests: XCTestCase {
     func testUpdateView() {
         let view = exampleUpdateView()

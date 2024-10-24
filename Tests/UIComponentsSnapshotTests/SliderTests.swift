@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class SliderTests: XCTestCase {
     func testSlider() {
         let view = ExampleCustomSlider()

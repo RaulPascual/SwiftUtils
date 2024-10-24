@@ -11,8 +11,9 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class OnboardingViewTests: XCTestCase {
-    @MainActor func testOnboardingView() {
+    func testOnboardingView() {
         let view = OnboardingView(primaryBackgroundColor: .blue,
                                   onboardViews: [OnBoardView(id: UUID(),
                                                              image: Image(systemName: "figure.soccer"),

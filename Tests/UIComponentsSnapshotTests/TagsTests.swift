@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class TagsTests: XCTestCase {
     func testSingleTagView() {
         let view = ExampleTagView()
