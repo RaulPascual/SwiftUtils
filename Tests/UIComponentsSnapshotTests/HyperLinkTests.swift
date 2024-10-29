@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class HyperLinkTests: XCTestCase {
     func testHyperLink() {
         let view = Hyperlink(text: "Go to developer site",

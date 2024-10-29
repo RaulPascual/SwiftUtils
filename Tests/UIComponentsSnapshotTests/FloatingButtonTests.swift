@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class FloatingButtonTests: XCTestCase {
     func testFloatingButton() {
         let view = FloatingButtonExample()

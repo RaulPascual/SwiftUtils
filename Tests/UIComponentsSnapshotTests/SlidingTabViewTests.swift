@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class SlidingTabViewTests: XCTestCase {
     func testSlidingTabView() {
         let view = SlidingTabView(selectionState: 0,

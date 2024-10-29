@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class CustomTextFieldTests: XCTestCase {
     func testCustomTextField() {
         let view = ExampleCustomTextfieldView()

@@ -16,7 +16,7 @@ import UIKit
 
  - Note: This function uses `UIImpactFeedbackGenerator` to generate haptic feedback.
  */
-func hapticVibration(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+@MainActor func hapticVibration(style: UIImpactFeedbackGenerator.FeedbackStyle) {
     let feedbackGenerator = UIImpactFeedbackGenerator(style: style)
     feedbackGenerator.impactOccurred()
 }

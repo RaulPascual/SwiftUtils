@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -14,7 +14,7 @@ let package = Package(
             name: "UIComponentsLibrary", targets: ["UIComponents"]),
     ],
     dependencies: [
-             .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.15.0")
+             .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.17.6")
         ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

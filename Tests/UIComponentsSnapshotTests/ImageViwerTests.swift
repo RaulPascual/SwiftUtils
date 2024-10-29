@@ -11,6 +11,7 @@ import SnapshotTesting
 
 @testable import UIComponents
 
+@MainActor
 final class ImageViwerTests: XCTestCase {
     func testImageViwer() {
         let view = ImageViwer(image: Image(systemName: "globe"))

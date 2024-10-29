@@ -80,6 +80,7 @@ struct BodyDisclosureGroup: View {
         DisclosureGroup {
             ScrollView {
                 Text(bodyText)
+                    .textSelection(.enabled)
             }
         } label: {
             Text(title).bold()
@@ -108,6 +109,7 @@ public struct RequestLineInformationView: View {
                 Text(lineInformation ?? "(nil)")
             }
         }
+        .textSelection(.enabled)
     }
 }
 

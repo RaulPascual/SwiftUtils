@@ -48,7 +48,7 @@ struct RequestsListView: View {
                                 .font(.system(size: 60))
                         }
                     } else {
-                        ForEach(filteredRequests, id: \.id) { item in
+                        ForEach(filteredRequests.reversed(), id: \.id) { item in
                             NavigationLink {
                                 RequestDetailsView(requestDetails: item)
                             } label: {

