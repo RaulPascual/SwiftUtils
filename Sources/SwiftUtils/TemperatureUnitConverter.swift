@@ -13,7 +13,7 @@ public enum TemperatureUnit {
     case kelvin
 }
 
-public struct TemperatureUnitConverter {
+public class TemperatureUnitConverter {
     
     public init() {}
     
