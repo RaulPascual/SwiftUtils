@@ -71,6 +71,27 @@ final class UserDefaultsManagerTests: XCTestCase {
         
         XCTAssertNil(userDefaults.data(forKey: testKey))
     }
+    
+    func testAddInt() {
+        let userDefaults = UserDefaults.standard
+        let testKey = "testIntKey"
+        let testInt = 93
+        UserDefaultsManager.saveToUserDefaults(testInt, forKey: testKey)
+        
+        XCTAssertNotNil(userDefaults.integer(forKey: testKey))
+        UserDefaultsManager.removeUserDefaultsData(forKey: testKey)
+    }
+    
+    func testGetGenericValue() {
+        let testKey = "testStringKey"
+        let testString = "Hey"
+        
+        UserDefaultsManager.saveToUserDefaults(testString, forKey: testKey)
+        let expectedResult: String? = UserDefaultsManager.getFromUserDefaults(forKey: testKey)
+        
+        XCTAssertEqual(testString, expectedResult)
+        UserDefaultsManager.removeUserDefaultsData(forKey: testKey)
+    }
 
 }
 
