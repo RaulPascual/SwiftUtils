@@ -86,4 +86,49 @@ public class UserDefaultsManager {
         }
         userDefaults.removeObject(forKey: key)
     }
+    
+    /**
+     Saves a value to `UserDefaults` under a specified key, with optional support for app groups.
+
+     This method allows saving a value to a specific `UserDefaults` suite or the standard one if no suite is specified.
+
+     - Parameters:
+        - value: The value to store in `UserDefaults`.
+        - key: The key under which to store the value.
+        - suiteName: An optional string for the suite name to use (e.g., for app group sharing). Defaults to `nil`, which uses the standard `UserDefaults`.
+
+     - Note: If the `suiteName` is provided but the suite cannot be created, the standard `UserDefaults` is used.
+     */
+    public static func saveToUserDefaults<T>(_ value: T, forKey key: String, suiteName: String? = nil) {
+        let userDefaults: UserDefaults
+        if let suiteName = suiteName {
+            userDefaults = UserDefaults(suiteName: suiteName) ?? .standard
+        } else {
+            userDefaults = .standard
+        }
+        userDefaults.set(value, forKey: key)
+    }
+
+    /**
+     Retrieves a value from `UserDefaults` under a specified key, with optional support for app groups.
+
+     This method fetches a value of a specified type from a specific `UserDefaults` suite or the standard one if no suite is specified.
+
+     - Parameters:
+        - key: The key for the value to retrieve from `UserDefaults`.
+        - suiteName: An optional string for the suite name to use (e.g., for app group sharing). Defaults to `nil`, which uses the standard `UserDefaults`.
+
+     - Returns: The value associated with the specified key, cast to the specified type, or `nil` if no value exists or the type cast fails.
+
+     - Note: If the `suiteName` is provided but the suite cannot be created, the standard `UserDefaults` is used.
+     */
+    public static func getFromUserDefaults<T>(forKey key: String, suiteName: String? = nil) -> T? {
+        let userDefaults: UserDefaults
+        if let suiteName = suiteName {
+            userDefaults = UserDefaults(suiteName: suiteName) ?? .standard
+        } else {
+            userDefaults = .standard
+        }
+        return userDefaults.value(forKey: key) as? T
+    }
 }
