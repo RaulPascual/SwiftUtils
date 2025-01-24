@@ -1,6 +1,6 @@
 //
 //  UserDefaultsManagerTests.swift
-//  
+//
 //
 //  Created by Raul on 22/5/24.
 //
@@ -92,10 +92,28 @@ final class UserDefaultsManagerTests: XCTestCase {
         XCTAssertEqual(testString, expectedResult)
         UserDefaultsManager.removeUserDefaultsData(forKey: testKey)
     }
-
+    
+    
+    func testRemoveItemFromArrayInUserDefaults() {
+        let testKey = "testArrayKey"
+        let testStructArray = [TestStruct(name: "Alonso", age: 33), TestStruct(name: "Marquez", age: 30)]
+        
+        let insert = UserDefaultsManager.saveStructToUserDefaults(testStructArray, forKey: testKey)
+        if insert {
+            UserDefaultsManager.removeItemFromArrayInUserDefaults(item: TestStruct(name: "Marquez", age: 30), forKey: testKey)
+            let result = UserDefaultsManager.loadStructFromUserDefaults([TestStruct].self, forKey: testKey)
+            
+            XCTAssertFalse(result?.contains(where: { item in
+                item.name == "Marquez"
+            }) ?? true)
+        }
+        
+        UserDefaultsManager.removeUserDefaultsData(forKey: testKey)
+    }
+    
 }
 
-struct TestStruct: Codable {
+struct TestStruct: Codable, Equatable {
     let name: String
     let age: Int
 }
