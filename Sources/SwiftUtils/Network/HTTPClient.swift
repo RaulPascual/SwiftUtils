@@ -42,7 +42,7 @@ extension HTTPClient {
                          message: "Complete URL: \(url.absoluteString)")
         
         if let body = endpoint.body {
-            request.httpBody = body.data(using: .utf8)
+            request.httpBody = body
         }
         
         do {
@@ -51,7 +51,7 @@ extension HTTPClient {
                 request: request,
                 responseModel: responseModel,
                 urlForDebugView: url,
-                endpointForDebugView: endpoint, 
+                endpointForDebugView: endpoint,
                 requestDate: requestDate
             )
         } catch {
@@ -102,7 +102,7 @@ extension HTTPClient {
                 endpoint: urlForDebugView.absoluteString,
                 method: endpointForDebugView.method.rawValue,
                 date: requestDate,
-                body: endpointForDebugView.body ?? "nil",
+                body: endpointForDebugView.body.flatMap { String(data: $0, encoding: .utf8) } ?? "",
                 response: DebugViewHTTPS.Response(
                     endpoint: httpResponse.url?.absoluteString ?? "",
                     date: Date.now,
