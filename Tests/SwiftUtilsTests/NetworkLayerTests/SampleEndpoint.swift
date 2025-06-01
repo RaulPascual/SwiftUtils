@@ -34,5 +34,5 @@ extension CurrentCalendarEndpoint: Endpoint {
 
     var header: [String: String]? { return ["Content-Type": "application/json"] }
 
-    var body: String? { return nil }
+    var body: Data? { return nil }
 }

@@ -26,6 +26,7 @@ public struct NotificationManager {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = message
+        content.sound = .default
 
         // Set the notification trigger to the specified date
         let calendar = Calendar.current

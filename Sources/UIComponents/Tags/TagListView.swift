@@ -8,9 +8,9 @@
 import SwiftUI
 /**
  A view displaying a list of tags.
-
+ 
  - Parameters:
-    - tags: A binding to an array of `TagModel` objects representing the tags to be displayed.
+ - tags: A binding to an array of `TagModel` objects representing the tags to be displayed.
  */
 public struct TagsListView: View {
     @Binding var tags: [TagModel]
@@ -20,15 +20,13 @@ public struct TagsListView: View {
     }
     
     public var body: some View {
-        let columns = [GridItem(.adaptive(minimum: 90))]
-        
         ScrollView {
-            LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {
+            FlowLayout {
                 ForEach($tags) { $tag in
                     TagView(tag: $tag)
+                        .padding(.all, 4)
                 }
             }
-            .padding()
         }
     }
 }
