@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TagModel: Identifiable {
+public struct TagModel: Identifiable, Equatable{
     public let id = UUID()
     var text: String
     var color: Color
