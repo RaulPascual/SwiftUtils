@@ -9,9 +9,9 @@ import SwiftUI
 
 public struct TagModel: Identifiable, Equatable{
     public let id = UUID()
-    var text: String
-    var color: Color
-    var isSelected: Bool = false
+    public var text: String
+    public var color: Color
+    public var isSelected: Bool = false
     
     public init(text: String, color: Color, isSelected: Bool = false) {
         self.text = text
