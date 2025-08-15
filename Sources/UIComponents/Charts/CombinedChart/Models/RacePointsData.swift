@@ -12,6 +12,12 @@ public struct RacePointsData: Identifiable, Hashable {
     let round: String
     let raceName: String
     let points: Double
+    
+    public init(round: String, raceName: String, points: Double) {
+        self.round = round
+        self.raceName = raceName
+        self.points = points
+    }
 }
 
 public enum ChartType {

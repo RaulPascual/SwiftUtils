@@ -23,6 +23,12 @@ public struct CombinedBarChartView: View {
         maxPoints + (maxPoints * 0.1)
     }
     
+    public init(racePointsData: [RacePointsData], barColor: Color, chartTitle: LocalizedStringKey) {
+        self.racePointsData = racePointsData
+        self.barColor = barColor
+        self.chartTitle = chartTitle
+    }
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
