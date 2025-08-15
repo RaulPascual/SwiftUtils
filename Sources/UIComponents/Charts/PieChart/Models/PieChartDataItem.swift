@@ -15,7 +15,7 @@ public struct PieChartDataItem: Identifiable, Hashable {
     let color: Color
     let subtitle: String?
     
-    init(label: String, value: Double, color: Color, subtitle: String? = nil) {
+    public init(label: String, value: Double, color: Color, subtitle: String? = nil) {
         self.label = label
         self.value = value
         self.color = color

@@ -16,7 +16,7 @@ public struct GenericPieChartView: View {
     let showSideCards: Bool
     let emptyStateMessage: String
     
-    init(
+    public init(
         data: [PieChartDataItem],
         centerLabel: String = "",
         centerValue: String = "",
