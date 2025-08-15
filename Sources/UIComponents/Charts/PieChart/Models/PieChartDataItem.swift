@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct PieChartDataItem: Identifiable, Hashable {
-    let id = UUID()
+public struct PieChartDataItem: Identifiable, Hashable {
+    public let id = UUID()
     let label: String
     let value: Double
     let color: Color

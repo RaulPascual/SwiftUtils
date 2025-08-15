@@ -9,7 +9,7 @@
 import SwiftUI
 import Charts
 
-struct CombinedBarChartView: View {
+public struct CombinedBarChartView: View {
     let racePointsData: [RacePointsData]
     let barColor: Color
     let chartTitle: LocalizedStringKey
@@ -23,7 +23,7 @@ struct CombinedBarChartView: View {
         maxPoints + (maxPoints * 0.1)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text(chartTitle)

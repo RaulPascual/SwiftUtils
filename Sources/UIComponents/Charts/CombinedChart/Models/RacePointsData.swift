@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct RacePointsData: Identifiable, Hashable {
-    let id = UUID()
+public struct RacePointsData: Identifiable, Hashable {
+    public let id = UUID()
     let round: String
     let raceName: String
     let points: Double
 }
 
-enum ChartType {
+public enum ChartType {
     case bar
     case line
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-struct GenericPieChartView: View {
+public struct GenericPieChartView: View {
     let data: [PieChartDataItem]
     let centerLabel: String
     let centerValue: String
@@ -45,7 +45,7 @@ struct GenericPieChartView: View {
         return [sortedData[1], sortedData[0]] + Array(sortedData.dropFirst(2))
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             if !sortedData.isEmpty {
                 if showSideCards && sortedData.count >= 2 {
@@ -84,11 +84,11 @@ struct GenericPieChartView: View {
     }
 }
 
-struct DataCard: View {
+public struct DataCard: View {
     let data: PieChartDataItem
     let isLeft: Bool
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 8) {
             Text(data.label)
                 .font(.system(size: 18, weight: .bold))
@@ -109,7 +109,7 @@ struct DataCard: View {
     }
 }
 
-struct CentralPieChart: View {
+public struct CentralPieChart: View {
     let data: [PieChartDataItem]
     let centerLabel: String
     let centerValue: String
@@ -119,7 +119,7 @@ struct CentralPieChart: View {
         data.reduce(0) { $0 + $1.value }
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 12) {
             // Center label and value
             if !centerValue.isEmpty {
