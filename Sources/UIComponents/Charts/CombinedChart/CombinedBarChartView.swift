@@ -1,5 +1,5 @@
 //
-//  RacePointsBarChartView.swift
+//  CombinedBarChartView.swift
 //  SwiftUtilsPackage
 //
 //  Created by Raul on 15/8/25.
@@ -45,23 +45,23 @@ struct CombinedBarChartView: View {
                         switch chartType {
                         case .bar:
                             BarMark(
-                                x: .value("HomeRound", "R\(race.round)"),
-                                y: .value("RaceRowViewPoints", race.points)
+                                x: .value("", "R\(race.round)"),
+                                y: .value("", race.points)
                             )
                             .foregroundStyle(barColor)
                             .cornerRadius(4)
                             
                         case .line:
                             LineMark(
-                                x: .value("HomeRound", "R\(race.round)"),
-                                y: .value("RaceRowViewPoints", race.points)
+                                x: .value("", "R\(race.round)"),
+                                y: .value("", race.points)
                             )
                             .foregroundStyle(barColor)
                             .lineStyle(StrokeStyle(lineWidth: 3))
                             
                             PointMark(
-                                x: .value("HomeRound", "R\(race.round)"),
-                                y: .value("RaceRowViewPoints", race.points)
+                                x: .value("", "R\(race.round)"),
+                                y: .value("", race.points)
                             )
                             .foregroundStyle(barColor)
                             .symbolSize(50)
