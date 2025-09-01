@@ -14,7 +14,7 @@ let package = Package(
             name: "UIComponentsLibrary", targets: ["UIComponents"]),
     ],
     dependencies: [
-             .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.17.6")
+             .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.18.6")
         ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
