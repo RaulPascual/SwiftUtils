@@ -1,17 +1,19 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "SwiftUtilsPackage",
-    platforms: [.iOS(.v17), .macOS(.v14)],
+    platforms: [.iOS(.v26), .macOS(.v26), .watchOS(.v26)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SwiftUtilsLibrary", targets: ["SwiftUtilities"]),
         .library(
             name: "UIComponentsLibrary", targets: ["UIComponents"]),
+        .library(
+            name: "SwiftUtilsIAP", targets: ["SwiftUtilsIAP"]),
     ],
     dependencies: [
              .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.18.6")
@@ -21,6 +23,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(name: "SwiftUtilities", path: "Sources/SwiftUtils"),
         .target(name: "UIComponents", path: "Sources/UIComponents"),
+        .target(name: "SwiftUtilsIAP", path: "Sources/SwiftUtilsIAP"),
         .testTarget(
             name: "SwiftUtilsTests",
             dependencies: ["SwiftUtilities",

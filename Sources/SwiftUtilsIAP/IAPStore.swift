@@ -101,18 +101,23 @@ public final class IAPStore: ObservableObject {
     ///
     /// This method allows users to redeem promotional codes generated from the Apple Developer Portal.
     /// The system handles the entire redemption flow including validation and transaction processing.
+    /// - Note: This method is only available on iOS. On other platforms, it does nothing.
     public func presentPromoCodeRedemption() {
+#if os(iOS)
         Task { @MainActor in
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
                 return
             }
-            
+
             do {
                 try await AppStore.presentOfferCodeRedeemSheet(in: windowScene)
             } catch {
                 print("Error presenting promo code sheet: \(error)")
             }
         }
+#else
+        print("Promo code redemption is not available on this platform")
+#endif
     }
     
     /// Processes a transaction verification result.
