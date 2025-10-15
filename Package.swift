@@ -12,6 +12,8 @@ let package = Package(
             name: "SwiftUtilsLibrary", targets: ["SwiftUtilities"]),
         .library(
             name: "UIComponentsLibrary", targets: ["UIComponents"]),
+        .library(
+            name: "SwiftUtilsIAP", targets: ["SwiftUtilsIAP"]),
     ],
     dependencies: [
              .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.18.6")
@@ -21,6 +23,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(name: "SwiftUtilities", path: "Sources/SwiftUtils"),
         .target(name: "UIComponents", path: "Sources/UIComponents"),
+        .target(name: "SwiftUtilsIAP", path: "Sources/SwiftUtilsIAP"),
         .testTarget(
             name: "SwiftUtilsTests",
             dependencies: ["SwiftUtilities",
