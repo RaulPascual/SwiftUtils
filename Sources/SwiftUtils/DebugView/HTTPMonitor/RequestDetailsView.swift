@@ -5,6 +5,7 @@
 //  Created by Raul on 17/7/24.
 //
 
+#if os(iOS)
 import SwiftUI
 
 public struct RequestDetailsView: View {
@@ -132,3 +133,4 @@ public struct RequestLineInformationView: View {
         )
     )
 }
+#endif
