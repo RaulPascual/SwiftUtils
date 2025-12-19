@@ -8,8 +8,9 @@
 import Foundation
 import UserNotifications
 
+@MainActor
 public struct NotificationManager {
-    
+
     public init() {}
     
     /**
