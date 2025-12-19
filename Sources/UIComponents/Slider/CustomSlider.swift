@@ -9,15 +9,15 @@ import SwiftUI
 
 /**
  A customizable slider view that allows for selecting a value within a specified range.
-
+ 
  - Parameters:
-    - currentValue: A binding to the current value selected by the slider.
-    - minValue: The minimum value of the slider's range.
-    - maxValue: The maximum value of the slider's range.
-    - step: The step increment for the slider. Default is `1.0`.
-    - backgroundColor: The background color of the slider track. Default is `.blue`.
-    - showButtons: A Boolean indicating whether to display increment and decrement buttons alongside the slider. Default is `false`.
-
+ - currentValue: A binding to the current value selected by the slider.
+ - minValue: The minimum value of the slider's range.
+ - maxValue: The maximum value of the slider's range.
+ - step: The step increment for the slider. Default is `1.0`.
+ - backgroundColor: The background color of the slider track. Default is `.blue`.
+ - showButtons: A Boolean indicating whether to display increment and decrement buttons alongside the slider. Default is `false`.
+ 
  - Note: The `CustomSlider` provides a flexible way to control and display values within a range. You can customize the slider's appearance and behavior, including the ability to show buttons for step adjustments.
  */
 public struct CustomSlider: View {
@@ -43,7 +43,7 @@ public struct CustomSlider: View {
             HStack {
                 if showButtons {
                     Button {
-                        self.currentValue -= step
+                        currentValue = max(minValue, currentValue - step)
                     } label: {
                         Image(systemName: "minus")
                             .tint(backgroundColor)
@@ -61,7 +61,7 @@ public struct CustomSlider: View {
                 
                 if showButtons {
                     Button {
-                        self.currentValue += step
+                        currentValue = min(maxValue, currentValue + step)
                     } label: {
                         Image(systemName: "plus")
                             .tint(backgroundColor)
