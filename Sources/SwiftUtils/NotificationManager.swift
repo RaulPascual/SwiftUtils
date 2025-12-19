@@ -93,29 +93,21 @@ public struct NotificationManager {
 
        - Returns: A boolean indicating whether a notification is scheduled for the specified date.
 
-       - Note: This function synchronously checks the pending notifications, which may block the main thread.
+       - Note: This function uses async/await and does not block the main thread.
     */
-    public func checkIfNotificationsExists(date: Date) -> Bool {
+    public func checkIfNotificationsExists(date: Date) async -> Bool {
         let center = UNUserNotificationCenter.current()
-        let semaphore = DispatchSemaphore(value: 0)
-        var notificationScheduled = false
+        let requests = await center.pendingNotificationRequests()
 
-        center.getPendingNotificationRequests { requests in
-            let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-            let notificationDate = Calendar.current.date(from: dateComponents)
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        let notificationDate = Calendar.current.date(from: dateComponents)
 
-            notificationScheduled = requests.contains { request in
-                guard let trigger = request.trigger as? UNCalendarNotificationTrigger else {
-                    return false
-                }
-                return trigger.nextTriggerDate() == notificationDate
+        return requests.contains { request in
+            guard let trigger = request.trigger as? UNCalendarNotificationTrigger else {
+                return false
             }
-
-            semaphore.signal()
+            return trigger.nextTriggerDate() == notificationDate
         }
-
-        semaphore.wait()
-        return notificationScheduled
     }
 
     /**

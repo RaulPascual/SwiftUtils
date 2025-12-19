@@ -112,8 +112,7 @@ extension HTTPClient {
                 requestOverviewInfo: [:]
             )
             
-            let debugView = DebugViewHTTPS.shared
-            await debugView.addRequestToList(request: request)
+            await DebugViewHTTPS.shared.addRequestToList(request: request)
         }
         
         switch httpResponse.statusCode {
