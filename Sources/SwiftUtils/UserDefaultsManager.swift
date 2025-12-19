@@ -32,8 +32,7 @@ public class UserDefaultsManager {
             }
             
             userDefaults.set(encoded, forKey: key)
-            userDefaults.synchronize() // Synchronize UserDefaults to ensure immediate save
-            return true // Return true to indicate successful save
+            return true
         } catch {
             print("Error saving struct to UserDefaults: \(error)")
             return false // Return false to indicate failure

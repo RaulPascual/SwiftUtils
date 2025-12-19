@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-actor DebugViewHTTPS: ObservableObject {
+@MainActor
+final class DebugViewHTTPS: ObservableObject {
     public static let shared = DebugViewHTTPS()
-    
+
     @Published var responsesList: [Response] = []
-    @MainActor @Published var requestsList: [Request] = []
-    
-    struct Request: Identifiable, Hashable {
+    @Published var requestsList: [Request] = []
+
+    struct Request: Identifiable, Hashable, Sendable {
         static func == (lhs: Request, rhs: Request) -> Bool {
             return lhs.date == rhs.date &&
                    lhs.endpoint == rhs.endpoint &&
@@ -41,8 +42,8 @@ actor DebugViewHTTPS: ObservableObject {
         var response: Response?
         var requestOverviewInfo: [String: String]
     }
-    
-    struct Response: Identifiable {
+
+    struct Response: Identifiable, Sendable {
         let id = UUID()
         var endpoint: String
         var date: Date?
@@ -50,8 +51,7 @@ actor DebugViewHTTPS: ObservableObject {
         var statusCode: String
         var responseHeaders: [String: String]?
     }
-    
-    @MainActor
+
     func addRequestToList(request: Request) {
         self.requestsList.append(request)
     }

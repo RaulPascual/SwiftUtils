@@ -54,8 +54,25 @@ extension HTTPClient {
                 endpointForDebugView: endpoint,
                 requestDate: requestDate
             )
+        } catch let urlError as URLError {
+            self.logMessages(enableDebug: enableDebug,
+                             message: "\n----- URLError: \(urlError.code) -----")
+            switch urlError.code {
+            case .timedOut:
+                return .failure(.timeout)
+            case .notConnectedToInternet, .networkConnectionLost:
+                return .failure(.failedConnection)
+            case .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed:
+                return .failure(.failedConnection)
+            case .cancelled:
+                return .failure(.unknown)
+            default:
+                return .failure(.general(urlError))
+            }
         } catch {
-            return .failure(.unknown)
+            self.logMessages(enableDebug: enableDebug,
+                             message: "\n----- Error: \(error) -----")
+            return .failure(.general(error))
         }
     }
     
@@ -112,8 +129,7 @@ extension HTTPClient {
                 requestOverviewInfo: [:]
             )
             
-            let debugView = DebugViewHTTPS.shared
-            await debugView.addRequestToList(request: request)
+            await DebugViewHTTPS.shared.addRequestToList(request: request)
         }
         
         switch httpResponse.statusCode {
