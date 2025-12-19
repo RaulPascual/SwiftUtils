@@ -25,22 +25,29 @@ public final class IAPStore: ObservableObject {
     private var task: Task<Void, Never>?
     
     /// Initializes the store by loading all available products, syncing current purchases,
-    /// and setting up a detached background task to listen for transaction updates.
+    /// and setting up a background task to listen for transaction updates.
     ///
     /// - Throws: An error if loading products fails.
     public init(bundlePrefix: String, productIdentifiers: [String]) async throws {
         products = try await IAPProduct.loadAll(bundlePrefix: bundlePrefix, productIdentifiers: productIdentifiers)
-        
+
         _ = await self.syncPurchases()
-        
-        // Detach a background task to continuously observe transaction updates.
+
+        // Background task to continuously observe transaction updates.
         // This ensures the app responds to new purchases or restorations even after initial load.
-        task = Task.detached(priority: .background) { [weak self] in
-            guard let self else {
-                return
-            }
+        task = Task { [weak self] in
             for await result in Transaction.updates {
-                try? await self.processTransaction(result: result)
+                // Check cancellation on each iteration
+                guard !Task.isCancelled else { break }
+
+                // Check self on each iteration to avoid retaining a deallocated object
+                guard let self else { break }
+
+                do {
+                    try await self.processTransaction(result: result)
+                } catch {
+                    print("IAPStore: Error processing transaction: \(error)")
+                }
             }
         }
     }
