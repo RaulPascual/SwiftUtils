@@ -16,9 +16,13 @@ struct DebugView: View {
                 NavigationLink(destination: RequestsListView(list: debugHTTPS)) {
                     Text("HTTPS Response")
                 }
-                
+
                 NavigationLink(destination: UserDefaultListView()) {
                     Text("UserDefaults Viewer")
+                }
+
+                NavigationLink(destination: PushNotificationListView()) {
+                    Text("Push Notifications")
                 }
             }
         }
