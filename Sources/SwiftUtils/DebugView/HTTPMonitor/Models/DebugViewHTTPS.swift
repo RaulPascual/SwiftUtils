@@ -10,19 +10,19 @@ import SwiftUI
 @MainActor
 final class DebugViewHTTPS: ObservableObject {
     public static let shared = DebugViewHTTPS()
-
+    
     @Published var responsesList: [Response] = []
     @Published var requestsList: [Request] = []
-
+    
     struct Request: Identifiable, Hashable, Sendable {
         static func == (lhs: Request, rhs: Request) -> Bool {
             return lhs.date == rhs.date &&
-                   lhs.endpoint == rhs.endpoint &&
-                   lhs.method == rhs.method &&
-                   lhs.body == rhs.body &&
-                   lhs.id == rhs.id
+            lhs.endpoint == rhs.endpoint &&
+            lhs.method == rhs.method &&
+            lhs.body == rhs.body &&
+            lhs.id == rhs.id
         }
-
+        
         func hash(into hasher: inout Hasher) {
             hasher.combine(id)
             hasher.combine(endpoint)
@@ -32,7 +32,7 @@ final class DebugViewHTTPS: ObservableObject {
             hasher.combine(headers)
             hasher.combine(requestOverviewInfo)
         }
-
+        
         let id = UUID()
         var endpoint: String
         var method: String
@@ -42,7 +42,7 @@ final class DebugViewHTTPS: ObservableObject {
         var response: Response?
         var requestOverviewInfo: [String: String]
     }
-
+    
     struct Response: Identifiable, Sendable {
         let id = UUID()
         var endpoint: String
@@ -51,8 +51,12 @@ final class DebugViewHTTPS: ObservableObject {
         var statusCode: String
         var responseHeaders: [String: String]?
     }
-
+    
     func addRequestToList(request: Request) {
         self.requestsList.append(request)
+    }
+    
+    func clearAllRequests() {
+        self.requestsList.removeAll()
     }
 }
