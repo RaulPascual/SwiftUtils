@@ -48,7 +48,8 @@ public struct RequestDetailsView: View {
                                         bodyText: requestDetails.body)
                     
                     BodyDisclosureGroup(title: "Response Body",
-                                        bodyText: requestDetails.response?.response ?? "No response body")
+                                        bodyText: requestDetails.response?.response ?? "No response body",
+                                        searchable: true)
                 }
             }
             .padding(.vertical)
@@ -81,16 +82,63 @@ public struct RequestDetailsView: View {
 struct BodyDisclosureGroup: View {
     var title: String
     var bodyText: String
+    var searchable: Bool = false
+    
+    @State private var searchText = ""
+    
+    private var matchCount: Int {
+        guard !searchText.isEmpty else { return 0 }
+        return bodyText.lowercased().components(separatedBy: searchText.lowercased()).count - 1
+    }
+    
+    private var highlightedText: AttributedString {
+        var attributed = AttributedString(bodyText)
+        guard !searchText.isEmpty else { return attributed }
+        
+        var searchRange = attributed.startIndex..<attributed.endIndex
+        while let range = attributed[searchRange].range(of: searchText, options: .caseInsensitive) {
+            attributed[range].backgroundColor = .yellow
+            attributed[range].foregroundColor = .black
+            searchRange = range.upperBound..<attributed.endIndex
+        }
+        return attributed
+    }
     
     var body: some View {
         DisclosureGroup {
-            ScrollView {
-                Text(bodyText)
-                    .font(.system(.caption, design: .monospaced))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .textSelection(.enabled)
+            VStack(spacing: 8) {
+                if searchable {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(.secondary)
+                        TextField("Search...", text: $searchText)
+                            .textFieldStyle(.plain)
+                        if !searchText.isEmpty {
+                            Text("\(matchCount)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Button {
+                                searchText = ""
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(8)
+                    .background(Color(.systemGray5))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                
+                ScrollView {
+                    Text(highlightedText)
+                        .font(.system(.caption, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                }
+                .frame(maxHeight: 200)
             }
-            .frame(maxHeight: 200)
         } label: {
             Text(title)
                 .font(.subheadline.bold())
