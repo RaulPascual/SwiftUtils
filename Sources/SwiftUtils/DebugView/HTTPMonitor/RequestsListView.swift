@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RequestsListView: View {
-    var list: DebugViewHTTPS
+    @ObservedObject var list: DebugViewHTTPS
     let requestTypes = ["ALL", "GET", "POST", "PUT", "DELETE"]
     @State private var selectedRequestType = "ALL"
     @State private var filteredEndpoint = ""
