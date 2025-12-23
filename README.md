@@ -16,15 +16,17 @@ To use this SPM, add the following URL as dependency in your project
 
 ## Utilities (WIP)
 - [x]  [User Defaults manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/UserDefaultsManager.swift)
-- [x]  [Keychain manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/KeychainManager.swift)
-- [x]  [Local Notification manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/NotificationManager.swift) 
+- [x]  [Local Notification manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/NotificationManager.swift)
 - [x]  [Network layer](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/SwiftUtils/Network)
 - [x]  [Date manager](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DateFormatManager.swift)
 - [x]  [Haptic Vibrations](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/HapticVibration.swift)
+- [x]  [Temperature Unit Converter](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/TemperatureUnitConverter.swift)
 - [x]  [App Coordinator](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/AppCoordinator)
+- [x]  [Extensions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/SwiftUtils/Extensions)
 - [x]  [Debug view](https://github.com/RaulPascual/SwiftUtils/blob/main/Sources/SwiftUtils/DebugView)
   - [x] HTTP Request monitor
   - [x] User defaults viewer and modifier
+  - [x] Push notifications viewer
 
 
 ## Components (WIP)
@@ -52,6 +54,14 @@ https://github.com/RaulPascual/SwiftUtils/assets/32883174/f9799af7-6e2b-4416-b8c
 - [x]  [ScrollTransitions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ScrollTransitions)
 - [x]  [TextField](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/TextField)
 - [x]  [Toast](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Toast)
+- [x]  [Charts](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Charts)
+- [x]  [Loader](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Loader)
+- [x]  [Slider](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Slider)
+- [x]  [SlidingTabView](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/SlidingTabView)
+- [x]  [Stepper](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Stepper)
+- [x]  [Tags](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Tags)
+- [x]  [Extensions](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/Extensions)
+- [x]  [ExperimentalFeature](https://github.com/RaulPascual/SwiftUtils/tree/main/Sources/UIComponents/ExperimentalFeature)
 
 ## Authors
 
