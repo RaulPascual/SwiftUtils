@@ -16,47 +16,54 @@ public struct RequestDetailsView: View {
         let responseDate = requestDetails.response?.date ?? Date()
         
         ScrollView {
-            VStack(alignment: .leading, spacing: 8) {
-                Group {
-                    RequestLineInformationView(lineTitle: "Request date:", lineDate: requestDate)
-                    
-                    RequestLineInformationView(lineTitle: "Response date:", lineDate: responseDate)
-                    
-                    RequestLineInformationView(lineTitle: "Duration:",
-                                           lineInformation: elapsedTime(from: requestDate,
-                                                                        to: responseDate))
-                    
-                    RequestLineInformationView(lineTitle: "Method:", lineInformation: requestDetails.method)
-                    
-                    RequestLineInformationView(lineTitle: "Endpoint:", lineInformation: requestDetails.endpoint)
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(spacing: 0) {
+                    RequestLineInformationView(lineTitle: "Request date", lineDate: requestDate)
+                    Divider().padding(.vertical, 8)
+                    RequestLineInformationView(lineTitle: "Response date", lineDate: responseDate)
+                    Divider().padding(.vertical, 8)
+                    RequestLineInformationView(lineTitle: "Duration",
+                                               lineInformation: elapsedTime(from: requestDate,
+                                                                            to: responseDate))
+                    Divider().padding(.vertical, 8)
+                    RequestLineInformationView(lineTitle: "Method", lineInformation: requestDetails.method)
+                    Divider().padding(.vertical, 8)
+                    RequestLineInformationView(lineTitle: "Endpoint", lineInformation: requestDetails.endpoint)
                 }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(.systemGray6))
+                )
                 .padding(.horizontal)
                 
-                Group {
-                    BodyDisclosureGroup(title: "Request Headers:", 
+                VStack(spacing: 8) {
+                    BodyDisclosureGroup(title: "Request Headers",
                                         bodyText: requestDetails.headers?.description ?? "No request headers")
                     
-                    BodyDisclosureGroup(title: "Response Headers:", 
+                    BodyDisclosureGroup(title: "Response Headers",
                                         bodyText: requestDetails.response?.responseHeaders?.description ?? "No response headers")
                     
-                    BodyDisclosureGroup(title: "Request Body:",
+                    BodyDisclosureGroup(title: "Request Body",
                                         bodyText: requestDetails.body)
                     
-                    BodyDisclosureGroup(title: "Response Body:", 
-                                        bodyText: requestDetails.response?.response ?? "No response body")
+                    BodyDisclosureGroup(title: "Response Body",
+                                        bodyText: requestDetails.response?.response ?? "No response body",
+                                        searchable: true)
                 }
             }
+            .padding(.vertical)
         }
     }
     
     /**
      Calculates the elapsed time between two dates and returns a formatted string.
-
+     
      This function calculates the time interval between two given dates. If the interval is less than one second, it returns the elapsed time in milliseconds. Otherwise, it returns the elapsed time in seconds with two decimal places.
-
+     
      - Parameters:
-        - startDate: The start date.
-        - endDate: The end date.
+     - startDate: The start date.
+     - endDate: The end date.
      - Returns: A formatted string representing the elapsed time in either milliseconds or seconds.
      */
     private func elapsedTime(from startDate: Date, to endDate: Date) -> String {
@@ -75,17 +82,73 @@ public struct RequestDetailsView: View {
 struct BodyDisclosureGroup: View {
     var title: String
     var bodyText: String
+    var searchable: Bool = false
+    
+    @State private var searchText = ""
+    
+    private var matchCount: Int {
+        guard !searchText.isEmpty else { return 0 }
+        return bodyText.lowercased().components(separatedBy: searchText.lowercased()).count - 1
+    }
+    
+    private var highlightedText: AttributedString {
+        var attributed = AttributedString(bodyText)
+        guard !searchText.isEmpty else { return attributed }
+        
+        var searchRange = attributed.startIndex..<attributed.endIndex
+        while let range = attributed[searchRange].range(of: searchText, options: .caseInsensitive) {
+            attributed[range].backgroundColor = .yellow
+            attributed[range].foregroundColor = .black
+            searchRange = range.upperBound..<attributed.endIndex
+        }
+        return attributed
+    }
     
     var body: some View {
         DisclosureGroup {
-            ScrollView {
-                Text(bodyText)
-                    .textSelection(.enabled)
+            VStack(spacing: 8) {
+                if searchable {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(.secondary)
+                        TextField("Search...", text: $searchText)
+                            .textFieldStyle(.plain)
+                        if !searchText.isEmpty {
+                            Text("\(matchCount)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Button {
+                                searchText = ""
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(8)
+                    .background(Color(.systemGray5))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                
+                ScrollView {
+                    Text(highlightedText)
+                        .font(.system(.caption, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                }
+                .frame(maxHeight: 200)
             }
         } label: {
-            Text(title).bold()
+            Text(title)
+                .font(.subheadline.bold())
         }
         .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(.systemGray6))
+        )
+        .padding(.horizontal)
     }
 }
 
@@ -100,13 +163,18 @@ public struct RequestLineInformationView: View {
         .second(.twoDigits)
     
     public var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             Text(lineTitle)
-                .bold()
+                .font(.subheadline.bold())
+                .foregroundStyle(.secondary)
+            Spacer()
             if let date = lineDate {
                 Text(date, format: RequestLineInformationView.dateFormat)
+                    .font(.subheadline)
             } else {
                 Text(lineInformation ?? "(nil)")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.trailing)
             }
         }
         .textSelection(.enabled)
