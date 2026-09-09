@@ -56,7 +56,7 @@ public struct SlidingTabView: View {
         inactiveTabColor: Color,
         activeTabColor: Color
     ) {
-        self.selectionState = selectionState
+        self._selectionState = State(initialValue: selectionState)
         self._selection = selection
         self.tabs = tabs
         self.activeAccentColor = activeAccentColor
