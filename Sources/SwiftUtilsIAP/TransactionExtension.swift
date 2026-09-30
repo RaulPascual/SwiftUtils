@@ -8,43 +8,24 @@
 import StoreKit
 
 public extension Transaction {
-    /// Returns true if the transaction is currently considered active.
-    ///
-    /// - For non-consumables: always true (unless revoked).
-    /// - For consumables: always true (they are one-time use, validity is immediate).
-    /// - For subscriptions: true if not expired and not revoked.
-    ///
-    /// - Parameter referenceDate: The date to compare against for expiration checks. Defaults to now.
-    /// - Returns: A Boolean indicating whether the transaction is active.
-    func isActive(at referenceDate: Date = Date()) -> Bool {
-        // Revoked transactions are never active
-        if revocationDate != nil {
-            return false
-        }
-
-        switch productType {
-        case .nonConsumable:
-            return true
-
-        case .consumable:
-            // Consumables are valid immediately after purchase
-            return true
-
-        case .autoRenewable:
-            guard let expirationDate else {
-                return false
-            }
-            return expirationDate > referenceDate
-
-        case .nonRenewable:
-            guard let expirationDate else {
-                return false
-            }
-            return expirationDate > referenceDate
-
-        default:
-            return false
-        }
+    /// Evaluates durable access. A transaction alone cannot describe billing grace
+    /// or an app-defined non-renewing period; supply that context when applicable.
+    /// For the store's complete access snapshot, prefer currentEntitlements.
+    /// Consumables never represent a durable entitlement.
+    func isActive(
+        at referenceDate: Date = Date(),
+        isInGracePeriod: Bool = false,
+        nonRenewingExpirationDate: Date? = nil
+    ) -> Bool {
+        IAPEntitlementPolicy.isActive(
+            type: productType,
+            isRevoked: revocationDate != nil,
+            isUpgraded: isUpgraded,
+            expirationDate: expirationDate,
+            referenceDate: referenceDate,
+            isInGracePeriod: isInGracePeriod,
+            nonRenewingExpirationDate: nonRenewingExpirationDate
+        )
     }
 
     /// Returns true if the transaction is currently considered active (convenience property).
@@ -72,5 +53,30 @@ public extension Transaction {
     /// Returns true if the transaction has been revoked (refunded or cancelled by Apple).
     var isRevoked: Bool {
         revocationDate != nil
+    }
+}
+
+/// Pure entitlement rules, separate from StoreKit fetching and UI publication.
+internal enum IAPEntitlementPolicy {
+    static func isActive(
+        type: Product.ProductType,
+        isRevoked: Bool = false,
+        isUpgraded: Bool = false,
+        expirationDate: Date? = nil,
+        referenceDate: Date,
+        isInGracePeriod: Bool = false,
+        nonRenewingExpirationDate: Date? = nil
+    ) -> Bool {
+        guard !isRevoked, !isUpgraded else { return false }
+        switch type {
+        case .nonConsumable:
+            return true
+        case .autoRenewable:
+            return isInGracePeriod || expirationDate.map { $0 > referenceDate } == true
+        case .nonRenewable:
+            return nonRenewingExpirationDate.map { $0 > referenceDate } == true
+        default:
+            return false
+        }
     }
 }
