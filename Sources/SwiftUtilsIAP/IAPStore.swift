@@ -6,172 +6,226 @@
 //
 
 import StoreKit
+import Observation
+import Foundation
 
-/// A store manager responsible for handling In-App Purchases (IAP) within the app.
-///
-/// This class loads available products, manages purchase transactions, and keeps track of purchased product identifiers.
-/// It observes transaction updates in the background to handle new purchases or restorations.
-///
-/// Note: This class requires network connectivity to load products and verify transactions.
+/// Manages non-consumables and subscriptions using verified StoreKit entitlements.
+/// Consumables require a separate persistent, idempotent delivery system.
 @MainActor
-public final class IAPStore: ObservableObject {
-    /// The list of available IAP products loaded from the App Store.
-    @Published public private(set) var products: [IAPProduct] = []
-    
-    /// The set of product identifiers that have been purchased.
+@Observable
+public final class IAPStore {
+    public private(set) var products: [IAPProduct] = []
     public private(set) var purchasedProductIDs: Set<String> = []
-    
-    /// A background task that listens for transaction updates asynchronously.
-    private var task: Task<Void, Never>?
-    
-    /// Initializes the store by loading all available products, syncing current purchases,
-    /// and setting up a background task to listen for transaction updates.
+    public private(set) var productLoadingError: Error?
+    public private(set) var transactionProcessingError: Error?
+
+    private let productIDs: Set<String>
+    private let nonRenewingSubscriptionDurations: [String: TimeInterval]
+    @ObservationIgnored private var task: Task<Void, Never>?
+    @ObservationIgnored private var startupTask: Task<Void, Never>?
+    @ObservationIgnored private var refreshTask: Task<Bool, Never>?
+    @ObservationIgnored private var refreshRequested = false
+    @ObservationIgnored private var catalogGeneration = 0
+
+    /// Creates a store immediately, starts listening, and loads entitlements and the
+    /// catalog independently. Retain this store at app scope from launch.
     ///
-    /// - Throws: An error if loading products fails.
-    public init(bundlePrefix: String, productIdentifiers: [String]) async throws {
-        products = try await IAPProduct.loadAll(bundlePrefix: bundlePrefix, productIdentifiers: productIdentifiers)
-
-        _ = await self.syncPurchases()
-
-        // Background task to continuously observe transaction updates.
-        // This ensures the app responds to new purchases or restorations even after initial load.
-        task = Task { [weak self] in
-            for await result in Transaction.updates {
-                // Check cancellation on each iteration
-                guard !Task.isCancelled else { break }
-
-                // Check self on each iteration to avoid retaining a deallocated object
-                guard let self else { break }
-
-                do {
-                    try await self.processTransaction(result: result)
-                } catch {
-                    print("IAPStore: Error processing transaction: \(error)")
-                }
+    /// Duration keys are full product IDs. Each non-renewing purchase grants access
+    /// for the configured number of seconds after its purchase date. Stacking or
+    /// server-managed subscription periods require a different entitlement policy.
+    public init(
+        productIDs: [String],
+        nonRenewingSubscriptionDurations: [String: TimeInterval] = [:]
+    ) {
+        self.productIDs = Set(productIDs)
+        self.nonRenewingSubscriptionDurations = nonRenewingSubscriptionDurations
+        startListening()
+        startupTask = Task { [weak self] in
+            guard let self else { return }
+            _ = await self.refreshPurchases()
+            await self.recoverUnfinishedTransactions()
+            do {
+                try await self.reloadProducts()
+            } catch {
+                // reloadProducts exposes the error without disabling the listener.
             }
         }
     }
-    
-    /// Initializes the store with a mock list of products, useful for previews or testing.
-    ///
-    /// - Parameter mockProducts: An array of `IAPProduct` used to simulate available products.
+
+    /// Compatibility initializer. Catalog failures are exposed through
+    /// productLoadingError so that the store and its listener remain usable.
+    /// Prefer init(productIDs:) when the UI must appear without waiting for loading.
+    public convenience init(
+        bundlePrefix: String,
+        productIdentifiers: [String],
+        nonRenewingSubscriptionDurations: [String: TimeInterval] = [:]
+    ) async throws {
+        self.init(
+            productIDs: productIdentifiers.map { bundlePrefix + $0 },
+            nonRenewingSubscriptionDurations: nonRenewingSubscriptionDurations
+        )
+        await startupTask?.value
+    }
+
+    /// Creates an inert store for previews; does not start StoreKit tasks.
     public init(mockProducts: [IAPProduct]) {
+        self.productIDs = Set(mockProducts.map(\.id))
+        self.nonRenewingSubscriptionDurations = [:]
         self.products = mockProducts
+        self.purchasedProductIDs = Set(mockProducts.filter(\.isPurchased).map(\.id))
     }
-    
-    /// Provides a preview instance of the store with no products.
-    public static var preview: IAPStore {
-        IAPStore(mockProducts: [])
-    }
-    
-    /// Indicates whether there are any active purchases.
-    ///
-    /// Returns `true` if at least one product has been purchased, otherwise `false`.
-    public var hasActivePurchases: Bool {
-        !purchasedProductIDs.isEmpty
-    }
-    
+
+    public static var preview: IAPStore { IAPStore(mockProducts: []) }
+    public var hasActivePurchases: Bool { !purchasedProductIDs.isEmpty }
+
     deinit {
-        // Cancel the background task observing transaction updates when the store is deallocated.
         task?.cancel()
+        startupTask?.cancel()
+        refreshTask?.cancel()
     }
-    
-    /// Initiates the purchase process for a given product.
-    ///
-    /// This method attempts to purchase the specified product, then processes the transaction result.
-    ///
-    /// - Parameter purchaseable: The `IAPProduct` to be purchased.
-    /// - Throws: An error if the purchase or transaction processing fails.
+
+    /// Retries catalog loading without resetting existing entitlements.
+    public func reloadProducts() async throws {
+        catalogGeneration += 1
+        let generation = catalogGeneration
+        do {
+            let loaded = try await Product.products(for: Array(productIDs))
+            guard generation == catalogGeneration else { return }
+            products = loaded.map {
+                IAPProduct(product: $0, isPurchased: purchasedProductIDs.contains($0.id))
+            }
+            productLoadingError = nil
+        } catch {
+            if generation == catalogGeneration { productLoadingError = error }
+            throw error
+        }
+    }
+
     public func buy(_ purchaseable: IAPProduct) async throws {
+        guard productIDs.contains(purchaseable.id) else { throw IAPError.productNotFound }
+        try validateSupport(type: purchaseable.product.type, productID: purchaseable.id)
         let result = try await purchaseable.product.purchase()
         switch result {
         case .success(let verificationResult):
             try await processTransaction(result: verificationResult)
-            
         case .pending, .userCancelled:
-            // No action needed if the purchase is pending or cancelled by the user.
             break
-            
         @unknown default:
             break
         }
     }
-    
-    /// Restores previously completed purchases by syncing current entitlements.
-    ///
-    /// - Returns: A Boolean indicating whether any purchases were restored.
-    public func restorePurchases() async -> Bool {
-        await syncPurchases()
-    }
-    
-    /// Presents the App Store's promotional code redemption sheet.
-    ///
-    /// This method allows users to redeem promotional codes generated from the Apple Developer Portal.
-    /// The system handles the entire redemption flow including validation and transaction processing.
-    /// - Note: This method is only available on iOS. On other platforms, it does nothing.
-    public func presentPromoCodeRedemption() {
-#if os(iOS)
-        Task { @MainActor in
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-                return
-            }
 
-            do {
-                try await AppStore.presentOfferCodeRedeemSheet(in: windowScene)
-            } catch {
-                print("Error presenting promo code sheet: \(error)")
+    /// Call only in response to the user's Restore Purchases action, as StoreKit
+    /// may request authentication. Returns whether supported entitlements exist
+    /// after synchronization; it does not indicate that new purchases were found.
+    @discardableResult
+    public func restorePurchases() async throws -> Bool {
+        try await AppStore.sync()
+        await recoverUnfinishedTransactions()
+        return await refreshPurchases()
+    }
+
+    /// Refresh local entitlements without prompting for authentication. Call when
+    /// the app returns to the foreground, including after redeeming outside the app.
+    /// Overlapping refresh requests are coalesced and trigger a fresh pass before
+    /// publication, so a transaction update cannot be overwritten by an older pass.
+    @discardableResult
+    public func refreshPurchases() async -> Bool {
+        refreshRequested = true
+        if let refreshTask { return await refreshTask.value }
+        let refresh = Task { @MainActor in
+            defer { self.refreshTask = nil }
+            var ids = Set<String>()
+            repeat {
+                self.refreshRequested = false
+                ids = []
+                for await result in Transaction.currentEntitlements {
+                    guard case .verified(let transaction) = result,
+                          self.productIDs.contains(transaction.productID),
+                          transaction.revocationDate == nil,
+                          !transaction.isUpgraded else { continue }
+                    switch transaction.productType {
+                    case .nonConsumable, .autoRenewable:
+                        // currentEntitlements includes subscriptions in billing
+                        // grace; expirationDate alone would incorrectly deny them.
+                        ids.insert(transaction.productID)
+                    case .nonRenewable:
+                        if let expiration = self.nonRenewingExpiration(for: transaction),
+                           transaction.isActive(nonRenewingExpirationDate: expiration) {
+                            ids.insert(transaction.productID)
+                        }
+                    default:
+                        break
+                    }
+                }
+                if Task.isCancelled { return self.hasActivePurchases }
+            } while self.refreshRequested
+
+            // No suspension while publishing the complete snapshot, including removals.
+            self.purchasedProductIDs = ids
+            self.products = self.products.map {
+                IAPProduct(product: $0.product, isPurchased: ids.contains($0.id))
+            }
+            return !ids.isEmpty
+        }
+        refreshTask = refresh
+        return await refresh.value
+    }
+
+    private func startListening() {
+        task = Task { [weak self] in
+            for await result in Transaction.updates {
+                guard !Task.isCancelled, let self else { break }
+                await self.handleTransaction(result)
             }
         }
-#else
-        print("Promo code redemption is not available on this platform")
-#endif
     }
-    
-    /// Processes a transaction verification result.
-    ///
-    /// If the transaction is verified, it updates the purchased products list,
-    /// marks the product as purchased if it's active, and finishes the transaction.
-    ///
-    /// - Parameter result: The verification result of a transaction.
-    /// - Throws: `IAPError.transactionUnverified` if the transaction is not verified.
+
+    private func recoverUnfinishedTransactions() async {
+        for await result in Transaction.unfinished {
+            guard !Task.isCancelled else { return }
+            await handleTransaction(result)
+        }
+    }
+
+    private func handleTransaction(_ result: VerificationResult<Transaction>) async {
+        do {
+            try await processTransaction(result: result)
+        } catch {
+            transactionProcessingError = error
+        }
+    }
+
     private func processTransaction(result: VerificationResult<Transaction>) async throws {
         guard case .verified(let transaction) = result else {
             throw IAPError.transactionUnverified
         }
-        
-        // Always finish the transaction
+        // Leave unrelated and unsupported transactions for their delivery owner.
+        guard productIDs.contains(transaction.productID) else { return }
+        try validateSupport(type: transaction.productType, productID: transaction.productID)
+        _ = await refreshPurchases()
+        guard !Task.isCancelled else { return }
+        // Access has now been reconciled and published, including revocations.
         await transaction.finish()
-        
-        // Only update purchased list if the subscription or product is currently active
-        if transaction.isActive {
-            purchasedProductIDs.insert(transaction.productID)
-            
-            if let index = products.firstIndex(where: { $0.id == transaction.productID }) {
-                products[index].isPurchased = true
+    }
+
+    private func validateSupport(type: Product.ProductType, productID: String) throws {
+        switch type {
+        case .nonConsumable, .autoRenewable:
+            return
+        case .nonRenewable:
+            guard let duration = nonRenewingSubscriptionDurations[productID],
+                  duration.isFinite, duration > 0 else {
+                throw IAPError.missingSubscriptionDuration(productID: productID)
             }
+        default:
+            throw IAPError.unsupportedProductType
         }
     }
-    
-    /// Synchronizes the current entitlements by fetching all verified transactions.
-    ///
-    /// This method clears the current purchased product IDs and repopulates them
-    /// based on current entitlements, updating the products' purchase status accordingly.
-    ///
-    /// - Returns: A Boolean indicating whether any purchases were found during synchronization.
-    private func syncPurchases() async -> Bool {
-        var restored = false
-        
-        purchasedProductIDs.removeAll()
-        
-        for await result in Transaction.currentEntitlements {
-            if case .verified(let transaction) = result, transaction.isActive {
-                purchasedProductIDs.insert(transaction.productID)
-                if let index = products.firstIndex(where: { $0.id == transaction.productID }) {
-                    products[index].isPurchased = true
-                }
-                restored = true
-            }
-        }
-        return restored
+
+    private func nonRenewingExpiration(for transaction: Transaction) -> Date? {
+        guard let duration = nonRenewingSubscriptionDurations[transaction.productID],
+              duration.isFinite, duration > 0 else { return nil }
+        return transaction.purchaseDate.addingTimeInterval(duration)
     }
 }

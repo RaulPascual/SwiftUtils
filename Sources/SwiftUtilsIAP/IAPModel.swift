@@ -57,6 +57,8 @@ public struct IAPProduct: Identifiable, Purchaseable {
 // MARK: - Error Handling
 
 public enum IAPError: Error, LocalizedError {
+    case unsupportedProductType
+    case missingSubscriptionDuration(productID: String)
     case transactionUnverified
     case productNotFound
     case purchaseFailed(underlying: Error?)
@@ -66,6 +68,10 @@ public enum IAPError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
+        case .unsupportedProductType:
+            return "This store does not support this product type. Consumables require a persistent delivery system."
+        case .missingSubscriptionDuration(let productID):
+            return "A valid duration must be configured for non-renewing subscription \(productID)."
         case .transactionUnverified:
             return "The transaction could not be verified."
         case .productNotFound:

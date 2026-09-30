@@ -24,6 +24,7 @@ let package = Package(
         .target(name: "SwiftUtilities", path: "Sources/SwiftUtils"),
         .target(name: "UIComponents", path: "Sources/UIComponents"),
         .target(name: "SwiftUtilsIAP", path: "Sources/SwiftUtilsIAP"),
+        .testTarget(name: "SwiftUtilsIAPTests", dependencies: ["SwiftUtilsIAP"]),
         .testTarget(
             name: "SwiftUtilsTests",
             dependencies: ["SwiftUtilities",
