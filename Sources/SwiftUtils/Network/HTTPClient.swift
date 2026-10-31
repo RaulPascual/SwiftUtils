@@ -92,6 +92,7 @@ extension HTTPClient {
         - Status code 401 indicates unauthorized access.
         - Status code 403 indicates forbidden access.
         - Status code 404 indicates that the requested resource was not found.
+        - Status code 429 indicates rate limiting and includes the optional Retry-After delay.
         - Status codes 500-599 indicate server errors.
         - Any other status code or inability to decode the response results in an unknown error.
      */
@@ -111,9 +112,7 @@ extension HTTPClient {
         
         if enableDebug {
             // Convert data to String
-            guard let jsonResponseString = String(data: data, encoding: .utf8) else {
-                return .failure(.decode)
-            }
+            let jsonResponseString = String(data: data, encoding: .utf8) ?? "<Non-UTF8 response body>"
             
             let request = DebugViewHTTPS.Request(
                 endpoint: urlForDebugView.absoluteString,
@@ -157,6 +156,12 @@ extension HTTPClient {
                              message: "\n----- ❌ Status Code: notFound -----")
             return .failure(.notFound)
             
+        case 429:
+            let retryAfter = retryAfterDelay(from: httpResponse.value(forHTTPHeaderField: "Retry-After"))
+            self.logMessages(enableDebug: enableDebug,
+                             message: "\n----- ❌ Status Code: tooManyRequests; Retry-After: \(String(describing: retryAfter)) -----")
+            return .failure(.tooManyRequests(retryAfter: retryAfter))
+
         case 500...599:
             self.logMessages(enableDebug: enableDebug,
                              message: "\n----- ❌ Status Code: \(httpResponse.statusCode) -----")
@@ -167,6 +172,37 @@ extension HTTPClient {
         }
     }
     
+    /// Parses Retry-After as nonnegative seconds or an HTTP date.
+    /// A missing or invalid header leaves the retry policy to the caller.
+    func retryAfterDelay(from header: String?, now: Date = Date()) -> TimeInterval? {
+        guard let value = header?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+            return nil
+        }
+
+        if value.utf8.allSatisfy({ (48...57).contains($0) }),
+           let seconds = TimeInterval(value), seconds.isFinite {
+            return seconds
+        }
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.isLenient = false
+        let formats = [
+            "EEE, dd MMM yyyy HH:mm:ss 'GMT'",
+            "EEEE, dd-MMM-yy HH:mm:ss 'GMT'",
+            "EEE MMM d HH:mm:ss yyyy"
+        ]
+        for format in formats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: value) {
+                return max(0, date.timeIntervalSince(now))
+            }
+        }
+        return nil
+    }
+
     /**
      Logs debug messages if debug mode is enabled.
 
