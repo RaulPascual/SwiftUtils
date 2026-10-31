@@ -20,6 +20,7 @@ public enum RequestError: Error {
     case badRequest // 400
     case clientErrorForbidden // 403
     case notFound // 404
+    case tooManyRequests(retryAfter: TimeInterval?) // 429; delay in seconds, if supplied and valid
     case duplicated // 409
     case serverError // 5...
     case expired // 450...499
@@ -39,6 +40,8 @@ public enum RequestError: Error {
             return "Decode error"
         case .clientErrorUnauthorized:
             return "Session expired"
+        case .tooManyRequests:
+            return "Too many requests"
         case .json(let error):
             return "JSON decode error \(error)."
         default:
