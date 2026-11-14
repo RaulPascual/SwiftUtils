@@ -16,7 +16,7 @@ extension HTTPClient {
      Sends an asynchronous network request and decodes the response into a specified model.
 
      - Parameters:
-        - enableDebug: A boolean value indicating whether to enable debug logging. Default is false.
+        - enableDebug: A boolean value indicating whether to enable debug logging with a per-request ID and elapsed time. Default is false.
         - endpoint: The endpoint to which the request will be sent, including base URL, path, method, header, and body.
         - responseModel: The type of the model to decode the response into.
 
@@ -29,7 +29,14 @@ extension HTTPClient {
         endpoint: Endpoint,
         responseModel: T.Type
     ) async -> Result<T, RequestError> {
+        let log = HTTPRequestLog(
+            enabled: enableDebug,
+            method: endpoint.method.rawValue,
+            url: endpoint.baseURL + endpoint.path
+        )
+        log.write("➡️ Request started")
         guard let url = URL(string: endpoint.baseURL + endpoint.path) else {
+            log.write("❌ Invalid URL")
             return .failure(.invalidURL)
         }
         
@@ -37,9 +44,6 @@ extension HTTPClient {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.allHTTPHeaderFields = endpoint.header
-        
-        self.logMessages(enableDebug: enableDebug,
-                         message: "Complete URL: \(url.absoluteString)")
         
         if let body = endpoint.body {
             request.httpBody = body
@@ -52,11 +56,11 @@ extension HTTPClient {
                 responseModel: responseModel,
                 urlForDebugView: url,
                 endpointForDebugView: endpoint,
-                requestDate: requestDate
+                requestDate: requestDate,
+                log: log
             )
         } catch let urlError as URLError {
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- URLError: \(urlError.code) -----")
+            log.write("❌ URLError: \(urlError.code); \(urlError.localizedDescription)")
             switch urlError.code {
             case .timedOut:
                 return .failure(.timeout)
@@ -70,8 +74,7 @@ extension HTTPClient {
                 return .failure(.general(urlError))
             }
         } catch {
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- Error: \(error) -----")
+            log.write("❌ Error: \(error)")
             return .failure(.general(error))
         }
     }
@@ -102,11 +105,13 @@ extension HTTPClient {
         responseModel: T.Type,
         urlForDebugView: URL,
         endpointForDebugView: Endpoint,
-        requestDate: Date
+        requestDate: Date,
+        log: HTTPRequestLog
     ) async throws -> Result<T, RequestError> {
         let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
         
         guard let httpResponse = response as? HTTPURLResponse else {
+            log.write("❌ No HTTP response")
             return .failure(.noResponse)
         }
         
@@ -133,41 +138,38 @@ extension HTTPClient {
         
         switch httpResponse.statusCode {
         case 200...299:
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ✅ Status Code: \(httpResponse.statusCode) -----")
-            
-            guard let decodedResponse = try? JSONDecoder().decode(responseModel, from: data) else {
+            do {
+                let decodedResponse = try JSONDecoder().decode(responseModel, from: data)
+                log.write("✅ HTTP \(httpResponse.statusCode); decoded \(responseModel)")
+                return .success(decodedResponse)
+            } catch {
+                log.write("❌ HTTP \(httpResponse.statusCode); decoding \(responseModel) failed: \(error)")
                 return .failure(.decode)
             }
-            return .success(decodedResponse)
             
         case 401:
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ❌ Status Code: clientUnauthorized -----")
+            log.write("❌ HTTP \(httpResponse.statusCode); clientUnauthorized")
             return .failure(.clientErrorUnauthorized)
             
         case 403:
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ❌ Status Code: clientErrorForbidden -----")
+            log.write("❌ HTTP \(httpResponse.statusCode); clientErrorForbidden")
             return .failure(.clientErrorForbidden)
             
         case 404:
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ❌ Status Code: notFound -----")
+            log.write("❌ HTTP \(httpResponse.statusCode); notFound")
             return .failure(.notFound)
             
         case 429:
             let retryAfter = retryAfterDelay(from: httpResponse.value(forHTTPHeaderField: "Retry-After"))
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ❌ Status Code: tooManyRequests; Retry-After: \(String(describing: retryAfter)) -----")
+            log.write("❌ HTTP \(httpResponse.statusCode); tooManyRequests; Retry-After: \(String(describing: retryAfter))")
             return .failure(.tooManyRequests(retryAfter: retryAfter))
 
         case 500...599:
-            self.logMessages(enableDebug: enableDebug,
-                             message: "\n----- ❌ Status Code: \(httpResponse.statusCode) -----")
+            log.write("❌ HTTP \(httpResponse.statusCode); serverError")
             return .failure(.serverError)
             
         default:
+            log.write("❌ HTTP \(httpResponse.statusCode); unexpected status")
             return .failure(.unknown)
         }
     }
@@ -203,18 +205,26 @@ extension HTTPClient {
         return nil
     }
 
-    /**
-     Logs debug messages if debug mode is enabled.
+}
 
-     - Parameters:
-        - enableDebug: A boolean value indicating whether to enable debug logging.
-        - message: The message to be logged.
+/// Immutable context shared by all log entries for one request, including failures.
+private struct HTTPRequestLog {
+    let enabled: Bool
+    let method: String
+    let url: String
+    private let id = UUID().uuidString
+    private let startedAt = ContinuousClock.now
 
-     - Note: If `enableDebug` is true, the message will be printed to the console.
-     */
-    private func logMessages(enableDebug: Bool, message: String) {
-        if enableDebug {
-            print(message)
-        }
+    func write(_ message: @autoclosure () -> String) {
+        guard enabled else { return }
+        let elapsed = startedAt.duration(to: .now).components
+        let milliseconds = Double(elapsed.seconds) * 1_000
+            + Double(elapsed.attoseconds) / 1_000_000_000_000_000
+        let prefix = "[HTTP][\(id)][\(method) \(url)] [+\(String(format: "%.0f", milliseconds)) ms]"
+        // Prefix every line so multiline decoding errors remain attributable when filtering logs.
+        let entry = message().split(separator: "\n", omittingEmptySubsequences: false)
+            .map { "\(prefix) \($0)" }
+            .joined(separator: "\n")
+        print(entry)
     }
 }
